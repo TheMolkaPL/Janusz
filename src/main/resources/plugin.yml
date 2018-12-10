@@ -1,0 +1,6 @@
+name: ${project.name}
+version: ${project.version}
+description: 'Janusz'
+author: 'TheMolkaPL <themolkapl@gmail.com>'
+main: pl.themolka.janusz.JanuszPlugin
+api-version: '1.13'
