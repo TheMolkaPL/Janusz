@@ -30,12 +30,12 @@ public class PlayerListHandler extends JanuszPlugin.Handler {
 
     private void updateFooter(Player player) {
         Location spawn = player.getWorld().getSpawnLocation();
-        player.setPlayerListFooter(ChatColor.GREEN + "Spawn znajduje się na " +
-                this.getCoordinate('X', spawn.getBlockX()) + ChatColor.GREEN +
-                ", " + this.getCoordinate('Z', spawn.getBlockZ()));
+        player.setPlayerListFooter("   " + ChatColor.GREEN + "Spawn znajduje się na " +
+                this.getCoordinate('X', spawn.getBlockX()) + ChatColor.GREEN + ", " +
+                this.getCoordinate('Z', spawn.getBlockZ()) + "   ");
     }
 
     private String getCoordinate(char axis, int at) {
-        return ChatColor.GOLD.toString() + Character.toUpperCase(axis) + ChatColor.BOLD + at + ChatColor.RESET;
+        return ChatColor.GOLD.toString() + Character.toUpperCase(axis) + ": " + ChatColor.BOLD + at + ChatColor.RESET;
     }
 }
