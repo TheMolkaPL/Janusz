@@ -1,31 +1,23 @@
 package pl.themolka.janusz;
 
-import org.bukkit.ChatColor;
-import org.bukkit.block.CommandBlock;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 
-public enum Message {
-    JOIN(ChatColor.AQUA + "%s " + ChatColor.DARK_AQUA,
-            "dołączył", "dołączyła", "dołączył/a",
-            " do serwera"),
-    QUIT(ChatColor.AQUA + "%s " + ChatColor.DARK_AQUA,
-            "wyszedł", "wyszła", "opuścił/a",
-            " serwer"),
-    ;
+import java.util.Objects;
 
+public class Message {
     private final String masculin;
     private final String feminin;
     private final String unisex;
 
-    Message(String masculin, String feminin, String unisex) {
-        this.masculin = masculin;
-        this.feminin = feminin;
-        this.unisex = unisex;
+    public Message(String masculin, String feminin, String unisex) {
+        this.masculin = Objects.requireNonNull(masculin, "masculin");
+        this.feminin = Objects.requireNonNull(feminin, "feminin");
+        this.unisex = Objects.requireNonNull(unisex, "unisex");
     }
 
-    Message(String prefix, String masculin, String feminin, String unisex, String suffix) {
-        this(prefix + masculin + suffix,
+    public Message(String prefix, String masculin, String feminin, String unisex, String suffix) {
+        this(Objects.requireNonNull(prefix, "prefix") + masculin + Objects.requireNonNull(suffix, "suffix"),
              prefix + feminin + suffix,
              prefix + unisex + suffix);
     }
@@ -51,9 +43,7 @@ public enum Message {
     }
 
     public String format(String username) {
-        if (username.equals(JanuszPlugin.PROFILE_USERNAME)) {
-            return null;
-        } else if (username.toLowerCase().equals("console")) {
+        if (username.toLowerCase().equals("console")) {
             return this.unisex;
         }
 
