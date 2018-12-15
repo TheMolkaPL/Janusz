@@ -54,9 +54,12 @@ public class Message {
                 return this.feminin;
 
             case "HejkaNaklejka":
+            case "KubaSMT":
+            case "Laki":
             case "Nerron":
             case "NoolNejm":
             case "SaveProjectAres":
+            case "Tomasz":
             case "TheMolkaPL":
                 return this.masculin;
 

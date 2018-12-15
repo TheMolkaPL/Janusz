@@ -13,7 +13,7 @@ public class JoinQuitHandler extends JanuszPlugin.Handler {
             " do serwera");
     private static final Message QUIT_MESSAGE = new Message(ChatColor.AQUA + "%s " + ChatColor.DARK_AQUA,
             "wyszedł", "wyszła", "opuścił/a",
-            " serwer");
+            " z serwera");
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void renameJoinMessage(PlayerJoinEvent event) {

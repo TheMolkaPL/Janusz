@@ -4,12 +4,14 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.craftbukkit.v1_13_R2.block.CraftBlock;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.util.Vector;
 
 public class TreeChopHandler extends JanuszPlugin.Handler {
@@ -20,7 +22,7 @@ public class TreeChopHandler extends JanuszPlugin.Handler {
         Block block = event.getBlock();
         Player player = event.getPlayer();
 
-        if (this.canChop(player)) {
+        if (this.canChop(player) && this.canChop(block)) {
             ChopSession session = new ChopSession();
             session.recursive(player, block);
         }
@@ -53,6 +55,15 @@ public class TreeChopHandler extends JanuszPlugin.Handler {
         }
     }
 
+    private boolean canChop(Block block) {
+        if (!this.isWood(block.getType())) {
+            return false;
+        }
+
+        ((CraftBlock) block).getNMS().getBlock();
+        return true;
+    }
+
     private boolean canChop(Player player) {
         if (player.isSneaking()) {
             return false;
@@ -67,6 +78,23 @@ public class TreeChopHandler extends JanuszPlugin.Handler {
             case SURVIVAL:
             case ADVENTURE:
                 return true;
+        }
+
+        return false;
+    }
+
+    private boolean canReceive(PlayerInventory inventory, Material material, int amount) {
+        int space = 0;
+
+        for (ItemStack item : inventory.getContents()) {
+            Material kind = item != null ? item.getType() : null;
+            if (kind == null || kind.equals(Material.AIR) || kind.equals(material)) {
+                space += material.getMaxStackSize() - (item != null ? item.getAmount() : 0);
+            }
+
+            if (space >= amount) {
+                return true;
+            }
         }
 
         return false;
@@ -88,23 +116,29 @@ public class TreeChopHandler extends JanuszPlugin.Handler {
 
                 Block block = base.getRelative(face);
 
-                if (this.chop(block)) {
+                if (this.chop(player, block)) {
                     this.broken++;
                     this.recursive(player, block);
                 }
             }
         }
 
-        boolean chop(Block block) {
-            if (!isWood(block.getType())) {
+        boolean chop(Player player, Block block) {
+            if (!canChop(block)) {
                 return false;
             }
 
-            Material material = block.getType();
             block.setType(Material.AIR, true);
+            ItemStack itemStack = new ItemStack(block.getType(), 1);
 
-            Item item = block.getWorld().dropItem(block.getLocation(), new ItemStack(material, 1));
-            item.setVelocity(NO_VELOCITY);
+            PlayerInventory inventory = player.getInventory();
+            if (canReceive(inventory, itemStack.getType(), itemStack.getAmount())) {
+                player.getInventory().addItem(itemStack);
+            } else {
+                Item item = block.getWorld().dropItem(block.getLocation(), itemStack);
+                item.setVelocity(NO_VELOCITY);
+            }
+
             return true;
         }
     }

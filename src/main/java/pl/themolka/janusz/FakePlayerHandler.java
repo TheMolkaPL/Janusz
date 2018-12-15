@@ -48,7 +48,9 @@ public class FakePlayerHandler extends JanuszPlugin.Handler {
     public void enable(JanuszPlugin plugin) {
         super.enable(plugin);
 
-        this.server.getScheduler().runTaskLater(plugin, this::createSession, 0L);
+        if (this.getTotalPlayerCount() <= 0) {
+            this.server.getScheduler().runTaskLater(plugin, this::createSession, 0L);
+        }
     }
 
     @Override
