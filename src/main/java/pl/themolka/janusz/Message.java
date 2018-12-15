@@ -6,13 +6,13 @@ import org.bukkit.command.ConsoleCommandSender;
 import java.util.Objects;
 
 public class Message {
-    private final String masculin;
-    private final String feminin;
+    private final String masculine;
+    private final String feminine;
     private final String unisex;
 
     public Message(String masculin, String feminin, String unisex) {
-        this.masculin = Objects.requireNonNull(masculin, "masculin");
-        this.feminin = Objects.requireNonNull(feminin, "feminin");
+        this.masculine = Objects.requireNonNull(masculin, "masculine");
+        this.feminine = Objects.requireNonNull(feminin, "feminine");
         this.unisex = Objects.requireNonNull(unisex, "unisex");
     }
 
@@ -22,12 +22,12 @@ public class Message {
              prefix + unisex + suffix);
     }
 
-    public String getMasculin() {
-        return this.masculin;
+    public String getMasculine() {
+        return this.masculine;
     }
 
-    public String getFeminin() {
-        return this.feminin;
+    public String getFeminine() {
+        return this.feminine;
     }
 
     public String getUnisex() {
@@ -51,7 +51,7 @@ public class Message {
             case "AsSik16":
             case "Monia97s":
             case "PizamaLama":
-                return this.feminin;
+                return this.feminine;
 
             case "HejkaNaklejka":
             case "KubaSMT":
@@ -61,7 +61,7 @@ public class Message {
             case "SaveProjectAres":
             case "Tomasz":
             case "TheMolkaPL":
-                return this.masculin;
+                return this.masculine;
 
             default:
                 return this.unisex;
