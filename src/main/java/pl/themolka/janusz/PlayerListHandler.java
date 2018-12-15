@@ -5,6 +5,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
@@ -31,6 +32,11 @@ public class PlayerListHandler extends JanuszPlugin.Handler {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.NORMAL)
     public void applyFooter(PlayerPortalEvent event) {
+        this.updateFooter(event.getPlayer());
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.NORMAL)
+    public void applyFooter(PlayerChangedWorldEvent event) {
         this.updateFooter(event.getPlayer());
     }
 
