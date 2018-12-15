@@ -22,9 +22,9 @@ public class TreeChopHandler extends JanuszPlugin.Handler {
         Block block = event.getBlock();
         Player player = event.getPlayer();
 
-        if (this.canChop(player) && this.canChop(block)) {
+        if (this.canChop(player)) {
             ChopSession session = new ChopSession();
-            session.recursive(player, block);
+            session.begin(player, block);
         }
     }
 
@@ -56,12 +56,7 @@ public class TreeChopHandler extends JanuszPlugin.Handler {
     }
 
     private boolean canChop(Block block) {
-        if (!this.isWood(block.getType())) {
-            return false;
-        }
-
-        ((CraftBlock) block).getNMS().getBlock();
-        return true;
+        return this.isWood(block.getType());
     }
 
     private boolean canChop(Player player) {
@@ -103,6 +98,16 @@ public class TreeChopHandler extends JanuszPlugin.Handler {
     class ChopSession {
         int broken = 0;
 
+        void begin(Player player, Block base) {
+            if (this.chop(player, base)) { // this block
+                this.broken++;
+                this.recursive(player, base); // blocks around
+            }
+        }
+
+        /**
+         * Chop blocks around the given {@code base}
+         */
         void recursive(Player player, Block base) {
             if (this.broken >= 50) {
                 player.sendMessage(ChatColor.RED + "Za duże drzewo! :(");
@@ -114,12 +119,7 @@ public class TreeChopHandler extends JanuszPlugin.Handler {
                     continue;
                 }
 
-                Block block = base.getRelative(face);
-
-                if (this.chop(player, block)) {
-                    this.broken++;
-                    this.recursive(player, block);
-                }
+                this.begin(player, base.getRelative(face));
             }
         }
 
@@ -128,7 +128,6 @@ public class TreeChopHandler extends JanuszPlugin.Handler {
                 return false;
             }
 
-            block.setType(Material.AIR, true);
             ItemStack itemStack = new ItemStack(block.getType(), 1);
 
             PlayerInventory inventory = player.getInventory();
@@ -136,9 +135,10 @@ public class TreeChopHandler extends JanuszPlugin.Handler {
                 player.getInventory().addItem(itemStack);
             } else {
                 Item item = block.getWorld().dropItem(block.getLocation(), itemStack);
-                item.setVelocity(NO_VELOCITY);
+                item.setVelocity(NO_VELOCITY.clone());
             }
 
+            block.setType(Material.AIR, true);
             return true;
         }
     }
