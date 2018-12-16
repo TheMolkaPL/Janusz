@@ -24,6 +24,7 @@ public class JanuszPlugin extends JavaPlugin {
 
         this.handlers = Stream.of(
                 new ChatFormatHandler(),
+                new DimensionPrefixHandler(),
                 new FakePlayerHandler(server, logger),
                 new FakePlayerAuthMeHandler(server, logger, PASSWORD),
                 new JoinQuitHandler(),
