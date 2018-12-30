@@ -10,6 +10,10 @@ public class Message {
     private final String feminine;
     private final String unisex;
 
+    public Message(String unisex) {
+        this(unisex, unisex, unisex);
+    }
+
     public Message(String masculin, String feminin, String unisex) {
         this.masculine = Objects.requireNonNull(masculin, "masculine");
         this.feminine = Objects.requireNonNull(feminin, "feminine");
@@ -22,28 +26,20 @@ public class Message {
              prefix + unisex + suffix);
     }
 
-    public String getMasculine() {
+    public String masculine() {
         return this.masculine;
     }
 
-    public String getFeminine() {
+    public String feminine() {
         return this.feminine;
     }
 
-    public String getUnisex() {
+    public String unisex() {
         return this.unisex;
     }
 
-    public String format(CommandSender sender) {
-        if (sender instanceof ConsoleCommandSender) {
-            return this.unisex;
-        }
-
-        return this.format(sender.getName());
-    }
-
     public String format(String username) {
-        if (username.toLowerCase().equals("console")) {
+        if (username == null || username.toLowerCase().equals("console")) {
             return this.unisex;
         }
 
@@ -56,8 +52,11 @@ public class Message {
             case "HejkaNaklejka":
             case "KubaSMT":
             case "Laki":
+            case "Lil_Sewer":
             case "Nerron":
             case "NoolNejm":
+            case "Patry17":
+            case "Quebo123":
             case "SaveProjectAres":
             case "Tomasz":
             case "TheMolkaPL":
