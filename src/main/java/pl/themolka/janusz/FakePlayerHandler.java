@@ -23,33 +23,39 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.util.Objects;
-import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class FakePlayerHandler extends JanuszPlugin.Handler {
     private static final InetSocketAddress ADDRESS = new InetSocketAddress("127.0.0.1", 25565);
 
-    public static final GameProfile PROFILE = new GameProfile(
-            UUID.fromString("069a79f4-44e9-4726-a5be-fca90e38aaf5"),
-            "Notch");
+    private final JanuszPlugin plugin;
+    private final Configuration.FakePlayer configuration;
 
     private final Server server;
     private final Logger logger;
 
+    private GameProfile profile;
     private FakePlayerSession session;
 
-    public FakePlayerHandler(Server server, Logger logger) {
-        this.server = Objects.requireNonNull(server, "server");
-        this.logger = Objects.requireNonNull(logger, "logger");
+    public FakePlayerHandler(JanuszPlugin plugin) {
+        this.plugin = Objects.requireNonNull(plugin, "plugin");
+        this.configuration = plugin.getConfiguration().getFakePlayer();
+
+        this.server = plugin.getServer();
+        this.logger = plugin.getLogger();
     }
 
     @Override
     public void enable(JanuszPlugin plugin) {
-        super.enable(plugin);
+        if (this.configuration.isEnabled()) {
+            super.enable(plugin);
 
-        if (this.getTotalPlayerCount() <= 0) {
-            this.server.getScheduler().runTaskLater(plugin, this::createSession, 0L);
+            this.profile = new GameProfile(this.configuration.getUuid(), this.configuration.getUsername());
+
+            if (this.getTotalPlayerCount() <= 0) {
+                this.server.getScheduler().runTaskLater(plugin, this::createSession, 0L);
+            }
         }
     }
 
@@ -64,7 +70,7 @@ public class FakePlayerHandler extends JanuszPlugin.Handler {
 
     public int getTotalPlayerCount() {
         return (int) this.server.getOnlinePlayers().stream()
-                .filter(player -> !player.getUniqueId().equals(PROFILE.getId()))
+                .filter(player -> !player.getUniqueId().equals(this.profile.getId()))
                 .count();
     }
 
@@ -90,7 +96,7 @@ public class FakePlayerHandler extends JanuszPlugin.Handler {
         FakePlayer player = new FakePlayer(
                 server,
                 Objects.requireNonNull(world, "world"),
-                PROFILE,
+                this.profile,
                 Objects.requireNonNull(interactManager, "interactManager"));
         player.playerConnection = new PlayerConnection(
                 server,
@@ -220,14 +226,14 @@ public class FakePlayerHandler extends JanuszPlugin.Handler {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void removeJoinMessage(PlayerJoinEvent event) {
-        if (event.getPlayer().getUniqueId().equals(PROFILE.getId())) {
+        if (event.getPlayer().getUniqueId().equals(this.profile.getId())) {
             event.setJoinMessage(null);
         }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void removeQuitMMessage(PlayerQuitEvent event) {
-        if (event.getPlayer().getUniqueId().equals(PROFILE.getId())) {
+        if (event.getPlayer().getUniqueId().equals(this.profile.getId())) {
             event.setQuitMessage(null);
         }
     }

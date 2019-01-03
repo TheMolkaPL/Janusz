@@ -1,11 +1,13 @@
 package pl.themolka.janusz;
 
 import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import pl.themolka.janusz.profile.LocalSessionHandler;
+
+import java.util.Objects;
 
 public class JoinQuitHandler extends JanuszPlugin.Handler {
     private static final Message JOIN_MESSAGE = new Message(ChatColor.AQUA + "%s " + ChatColor.DARK_AQUA,
@@ -15,15 +17,25 @@ public class JoinQuitHandler extends JanuszPlugin.Handler {
             "wyszedł", "wyszła", "opuścił/a",
             " z serwera");
 
+    private final JanuszPlugin plugin;
+
+    public JoinQuitHandler(JanuszPlugin plugin) {
+        this.plugin = Objects.requireNonNull(plugin, "plugin");
+    }
+
     @EventHandler(priority = EventPriority.LOWEST)
     public void renameJoinMessage(PlayerJoinEvent event) {
-        Player player = event.getPlayer();
-        event.setJoinMessage(String.format(JOIN_MESSAGE.format(player), player.getName()));
+        this.plugin.getHandler(LocalSessionHandler.class).ifPresent(
+                handler -> handler.getLocalSession(event.getPlayer()).ifPresent(session -> {
+            event.setJoinMessage(String.format(session.format(JOIN_MESSAGE), session.getUsername()));
+        }));
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void renameQuitMessage(PlayerQuitEvent event) {
-        Player player = event.getPlayer();
-        event.setQuitMessage(String.format(QUIT_MESSAGE.format(player), player.getName()));
+        this.plugin.getHandler(LocalSessionHandler.class).ifPresent(
+                handler -> handler.getLocalSession(event.getPlayer()).ifPresent(session -> {
+            event.setQuitMessage(String.format(session.format(QUIT_MESSAGE), session.getUsername()));
+        }));
     }
 }

@@ -4,7 +4,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.craftbukkit.v1_13_R2.block.CraftBlock;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,8 +13,18 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.util.Vector;
 
+import java.util.Objects;
+
 public class TreeChopHandler extends JanuszPlugin.Handler {
     private static final Vector NO_VELOCITY = new Vector();
+
+    private final JanuszPlugin plugin;
+    private final Configuration configuration;
+
+    public TreeChopHandler(JanuszPlugin plugin) {
+        this.plugin = Objects.requireNonNull(plugin, "plugin");
+        this.configuration = plugin.getConfiguration();
+    }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onTreeChop(BlockBreakEvent event) {
@@ -109,7 +118,7 @@ public class TreeChopHandler extends JanuszPlugin.Handler {
          * Chop blocks around the given {@code base}
          */
         void recursive(Player player, Block base) {
-            if (this.broken >= 50) {
+            if (this.broken >= configuration.getTreeSizeLimit()) {
                 player.sendMessage(ChatColor.RED + "Za duże drzewo! :(");
                 return;
             }

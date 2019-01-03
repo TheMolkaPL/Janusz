@@ -1,6 +1,30 @@
 name: ${project.name}
 version: ${project.version}
-description: 'Janusz'
+description: 'Plugin na Janusza'
 author: 'TheMolkaPL <themolkapl@gmail.com>'
 main: pl.themolka.janusz.JanuszPlugin
 api-version: '1.13'
+
+commands:
+  player:
+    description: 'Informacje o danym graczu'
+    aliases: ['gracz', 'seen', 'find']
+    permission: 'janusz.command.player'
+    permission-message: 'Brak odpowiednich uprawnień'
+    usage: '/<command> [player]'
+  call-match-end-event:
+    permission: 'janusz.command.call-match-end-event'
+
+permissions:
+  'janusz.*':
+    description: 'Gives access to all Janusz permissions'
+    default: op
+  'janusz.command.*':
+    description: 'Gives access to all Janusz commands'
+    default: op
+  'janusz.command.player':
+    description: 'Gives access to the /player command'
+    default: true
+  janusz.colored-signs:
+    description: 'Gives access to color signs'
+    default: true

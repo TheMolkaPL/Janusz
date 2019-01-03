@@ -1,0 +1,17 @@
+database:
+  jdbcUrl: 'jdbc:mysql://localhost/janusz'
+  username: root
+  maximumPoolSize: 2
+  poolName: 'Janusz-Database-Pool'
+
+current-season-id: 1
+phantom-spawn-chance: 0.1
+observer-names: [TheMolkaPL]
+tree-size-limit: 100
+
+fake-player:
+  enabled: false
+  uuid: '069a79f4-44e9-4726-a5be-fca90e38aaf5'
+  username: 'Notch'
+  authme-login-command: 'login'
+  authme-password: 'password'

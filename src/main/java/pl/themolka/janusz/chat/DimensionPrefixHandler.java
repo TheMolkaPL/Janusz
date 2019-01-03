@@ -1,4 +1,4 @@
-package pl.themolka.janusz;
+package pl.themolka.janusz.chat;
 
 import com.google.common.collect.ImmutableMap;
 import org.bukkit.ChatColor;
@@ -6,6 +6,7 @@ import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import pl.themolka.janusz.JanuszPlugin;
 
 import java.util.Map;
 import java.util.Objects;
