@@ -2,8 +2,7 @@ package pl.themolka.janusz.arena;
 
 import org.apache.commons.lang3.Validate;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.util.Vector;
+import org.bukkit.Server;
 import pl.themolka.janusz.JanuszPlugin;
 import pl.themolka.janusz.Message;
 import pl.themolka.janusz.arena.event.MatchBeginEvent;
@@ -77,6 +76,21 @@ public class Match extends GameState {
         return false;
     }
 
+    @Override
+    public boolean isRunning() {
+        return this.running;
+    }
+
+    @Override
+    protected boolean join(LocalSession competitor) {
+        return false;
+    }
+
+    @Override
+    protected Optional<MatchResult> leave(LocalSession competitor) {
+        return this.running ? this.die(competitor) : Optional.empty();
+    }
+
     public Game getGame() {
         return this.game;
     }
@@ -132,15 +146,16 @@ public class Match extends GameState {
         this.running = false;
 
         if (winner != null) {
-            this.plugin.getServer().broadcastMessage(String.format(winner.format(VICTORY_MESSAGE), winner.getUsername()));
             arena.getDefaultSpawn().spawn(winner);
+
+            Server server = this.plugin.getServer();
+            server.getScheduler().callSyncMethod(this.plugin, () -> server.broadcastMessage(
+                    String.format(winner.format(VICTORY_MESSAGE), winner.getUsername())));
         }
 
         arena.getGates().forEach(Gate::close);
 
         this.logger.info("The match has ended with " + (winner != null ? "winner: " + winner : "no winner."));
-
-        this.game.transform(this.game.getFactory().idle());
 
         return result;
     }
@@ -148,6 +163,7 @@ public class Match extends GameState {
     public Optional<MatchResult> die(LocalSession competitor) {
         Objects.requireNonNull(competitor, "competitor");
         if (this.competitorsAlive.remove(competitor)) {
+            this.game.getArena().getDefaultSpawn().spawn(competitor);
             return this.testVictory();
         }
 
@@ -168,10 +184,6 @@ public class Match extends GameState {
 
     public Instant getBeganAt() {
         return this.beganAt;
-    }
-
-    public boolean isRunning() {
-        return this.running;
     }
 
     private Optional<MatchResult> testVictory() {

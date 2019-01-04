@@ -5,6 +5,7 @@ import pl.themolka.janusz.profile.LocalSession;
 
 import java.util.HashSet;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Logger;
@@ -35,12 +36,16 @@ public class GameState {
         return false;
     }
 
+    public boolean isRunning() {
+        return false;
+    }
+
     protected boolean join(LocalSession competitor) {
         return false;
     }
 
-    protected boolean leave(LocalSession competitor) {
-        return false;
+    protected Optional<MatchResult> leave(LocalSession competitor) {
+        return Optional.empty();
     }
 
     @Override
@@ -110,15 +115,15 @@ public class GameState {
         }
 
         @Override
-        protected boolean leave(LocalSession competitor) {
+        protected Optional<MatchResult> leave(LocalSession competitor) {
             Objects.requireNonNull(competitor, "competitor");
             this.reloadQueue();
 
-            boolean ok;
-            if (ok = this.queue.remove(competitor)) {
+            if (this.queue.remove(competitor)) {
                 this.testForNewState();
             }
-            return ok;
+
+            return Optional.empty();
         }
 
         protected void testForNewState() {

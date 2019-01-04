@@ -1,4 +1,4 @@
-package pl.themolka.janusz;
+package pl.themolka.janusz.arena;
 
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
@@ -7,7 +7,7 @@ import org.bukkit.entity.Firework;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.inventory.meta.FireworkMeta;
-import pl.themolka.janusz.arena.Arena;
+import pl.themolka.janusz.JanuszPlugin;
 import pl.themolka.janusz.arena.event.MatchEndEvent;
 
 public class VictoryHandler extends JanuszPlugin.Handler {

@@ -47,10 +47,6 @@ public class Starting extends GameState.Queue {
     @Override
     public void testForNewState() {
         if (!this.canStart()) {
-            // sorry!
-            Spawn defaultSpawn = this.game.getArena().getDefaultSpawn();
-            this.queue.forEach(defaultSpawn::spawn);
-
             this.game.transform(this.game.getFactory().idle(this.queue));
         }
     }

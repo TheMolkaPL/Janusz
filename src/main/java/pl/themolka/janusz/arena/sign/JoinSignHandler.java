@@ -2,6 +2,7 @@ package pl.themolka.janusz.arena.sign;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -63,7 +64,11 @@ public class JoinSignHandler extends JanuszPlugin.Handler {
         }
 
         sessionHandler.getLocalSession(player).ifPresent(clicker -> this.findSign(clicked.getLocation()).ifPresent(pair -> {
-            pair.getRight().click(pair.getLeft(), clicker, event);
+            if (player.hasPermission("janusz.join-arena")) {
+                pair.getRight().click(pair.getLeft(), clicker, event);
+            } else {
+                clicker.printError("Brak odpowiednich uprawnień");
+            }
         }));
     }
 

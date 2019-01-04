@@ -1,33 +1,33 @@
 package pl.themolka.janusz.arena;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import pl.themolka.janusz.JanuszPlugin;
-import pl.themolka.janusz.arena.event.MatchEndEvent;
 import pl.themolka.janusz.arena.sign.JoinSign;
-import pl.themolka.janusz.database.Database;
 import pl.themolka.janusz.geometry.Cuboid;
 import pl.themolka.janusz.geometry.Cylinder;
 import pl.themolka.janusz.geometry.Region;
 import pl.themolka.janusz.geometry.Vector3d;
+import pl.themolka.janusz.profile.LocalSession;
+import pl.themolka.janusz.profile.LocalSessionHandler;
 
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.logging.Logger;
 
 public class ArenaHandler extends JanuszPlugin.Handler {
     private final JanuszPlugin plugin;
-    private final Database database;
-
-    private final MatchResultDao matchResultDao;
 
     private final Game game;
 
     public ArenaHandler(JanuszPlugin plugin) {
         this.plugin = Objects.requireNonNull(plugin, "plugin");
-        this.database = plugin.getDb();
-
-        this.matchResultDao = this.database.getMatchResultDao();
 
         this.game = new Game(plugin, this.plugin.getLogger(), this.createDefaultArena(), 2);
     }
@@ -42,23 +42,16 @@ public class ArenaHandler extends JanuszPlugin.Handler {
         return this.game;
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void logMatchResultInDatabase(MatchEndEvent event) {
-        MatchResult result = event.getResult();
-        if (result.getWinner().isPresent()) {
-            this.database.getExecutor().submit(() -> this.matchResultDao.save(result));
-        }
-    }
-
     private Arena createDefaultArena() {
         Logger logger = this.plugin.getLogger();
         logger.info("Creating default arena...");
 
         UUID worldId = this.plugin.getServer().getWorlds().get(0).getUID();
-        Region region = new Cylinder(new Vector3d(-514.5D, 60D, 1292.5D), 30.5D, 8D);
+        Region field = new Cylinder(new Vector3d(-514.5D, 60D, 1292.5D), 30.5D, 8D);
+        Region region = new Cylinder(new Vector3d(-514.5D, 0D, 1292.5D), 150D, 255D);
         Spawn defaultSpawn = new Spawn(worldId, new Vector3d(-543.5D, 69D, 1292.5D), -90F, 0F);
 
-        Arena arena = new Arena(this.plugin, "Arena PVP", worldId, region, defaultSpawn);
+        Arena arena = new Arena(this.plugin, "Arena PVP", worldId, field, region, defaultSpawn);
 
         arena.addSpawn(new Spawn(worldId, new Vector3d(-542.5D, 63D, 1292.5D), -90F, 0F)); // west
         arena.addSpawn(new Spawn(worldId, new Vector3d(-486.5D, 63D, 1292.5D), +90F, 0F)); // east
@@ -100,5 +93,59 @@ public class ArenaHandler extends JanuszPlugin.Handler {
         arena.addJoinSign(new JoinSign(arena, new Vector3d(-542, 70, 1294)));
 
         return arena;
+    }
+
+    //
+    // Listeners
+    //
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void handleQuit(PlayerDeathEvent event) {
+        this.getSession(event.getEntity()).flatMap(this.game::leave).ifPresent(result -> {
+            this.game.transform(this.game.getFactory().idle());
+            event.setKeepInventory(true);
+
+            Player killer = event.getEntity().getKiller();
+            if (killer != null) {
+                killer.setLevel(killer.getLevel() + 15);
+            }
+        });
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void handleQuit(PlayerQuitEvent event) {
+        this.getSession(event.getPlayer()).ifPresent(competitor -> this.game.leave(competitor)
+                .ifPresent(result -> this.game.transform(this.game.getFactory().idle())));
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void handleQuit(PlayerTeleportEvent event) {
+        this.getSession(event.getPlayer()).ifPresent(competitor -> {
+            Arena arena = this.game.getArena();
+
+            Region region;
+            if (this.game.isRunning()) {
+                // Test if the competitor teleports outside the field, if yes, kick him from the game.
+                region = arena.getField();
+            } else {
+                // Test if the queued player teleports outside the arena building, if yes, kick him from the queue.
+                region = arena.getRegion();
+            }
+
+            if (!region.contains(event.getTo())) {
+                this.game.leave(competitor).ifPresent(result -> this.game.transform(this.game.getFactory().idle()));
+            }
+        });
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void handleQuit(PlayerChangedWorldEvent event) {
+        this.getSession(event.getPlayer()).ifPresent(this.game::leave);
+    }
+
+    private Optional<LocalSession> getSession(Player player) {
+        Objects.requireNonNull(player, "player");
+        return this.plugin.getHandler(LocalSessionHandler.class)
+                .flatMap(handler -> handler.getLocalSession(player));
     }
 }

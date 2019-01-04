@@ -72,6 +72,7 @@ public class ObserverHandler extends JanuszPlugin.Handler {
         }
     }
 
+    // should listen to PlayerPickupExperienceEvent
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onPlayerExpChange(PlayerExpChangeEvent event) {
         if (this.isObserving(event.getPlayer())) {

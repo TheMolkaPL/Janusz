@@ -20,7 +20,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
-public class PlayerCommandHandler extends JanuszPlugin.Handler implements CommandExecutor, TabCompleter {
+public class PlayerCommandHandler extends JanuszPlugin.CommandHandler {
     private static final String ONLINE = ChatColor.GREEN + ChatColor.BOLD.toString() + "online" + ChatColor.RESET;
 
     private static final Message LAST_SEEN = new Message("był ostatnio widziany",
@@ -36,20 +36,13 @@ public class PlayerCommandHandler extends JanuszPlugin.Handler implements Comman
     private final SessionDao sessionDao;
 
     public PlayerCommandHandler(JanuszPlugin plugin) {
+        super("player");
+
         this.plugin = Objects.requireNonNull(plugin, "plugin");
         this.database = plugin.getDb();
 
         this.profileDao = this.database.getProfileDao();
         this.sessionDao = this.database.getSessionDao();
-    }
-
-    @Override
-    public void enable(JanuszPlugin plugin) {
-        super.enable(plugin);
-
-        PluginCommand command = plugin.getCommand("player");
-        command.setExecutor(this);
-        command.setTabCompleter(this);
     }
 
     @Override

@@ -86,7 +86,7 @@ public class InstantTntHandler extends JanuszPlugin.Handler {
 
             return  arena.getWorldId().equals(location.getWorld().getUID()) &&
                     game.getState() instanceof Match &&
-                    arena.getRegion().contains(location);
+                    arena.getField().contains(location);
         }
 
         return false;

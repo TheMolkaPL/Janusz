@@ -2,6 +2,7 @@ package pl.themolka.janusz;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -10,40 +11,61 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
+import java.util.Objects;
+
 public class PlayerListHandler extends JanuszPlugin.Handler {
+    private static final int MAX_NAME_LENGTH = 16;
+
     @EventHandler(priority = EventPriority.NORMAL)
-    public void applyName(PlayerJoinEvent event) {
-        Player player = event.getPlayer();
+    public void apply(PlayerJoinEvent event) {
+        this.update(event.getPlayer());
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.NORMAL)
+    public void apply(PlayerTeleportEvent event) {
+        this.update(event.getPlayer());
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.NORMAL)
+    public void apply(PlayerPortalEvent event) {
+        this.update(event.getPlayer());
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.NORMAL)
+    public void apply(PlayerChangedWorldEvent event) {
+        this.update(event.getPlayer());
+    }
+
+    private void update(Player player) {
+        Objects.requireNonNull(player, "player");
+        this.updateName(player);
+        this.updateFooter(player);
+    }
+
+    private void updateName(Player player) {
+        String color = this.getColor(player.getWorld()).toString();
         String name = player.getName();
-
-        String color = ChatColor.GRAY.toString();
-        player.setPlayerListName(color + name.substring(0, Math.min(name.length(), 16 - color.length())));
+        player.setPlayerListName(color + name.substring(0, Math.min(name.length(), MAX_NAME_LENGTH - color.length())));
     }
 
-    @EventHandler(priority = EventPriority.NORMAL)
-    public void applyFooter(PlayerJoinEvent event) {
-        this.updateFooter(event.getPlayer());
-    }
-
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.NORMAL)
-    public void applyFooter(PlayerTeleportEvent event) {
-        this.updateFooter(event.getPlayer());
-    }
-
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.NORMAL)
-    public void applyFooter(PlayerPortalEvent event) {
-        this.updateFooter(event.getPlayer());
-    }
-
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.NORMAL)
-    public void applyFooter(PlayerChangedWorldEvent event) {
-        this.updateFooter(event.getPlayer());
+    private ChatColor getColor(World world) {
+        switch (world.getEnvironment()) {
+            case NORMAL:
+                return ChatColor.GREEN;
+            case NETHER:
+                return ChatColor.RED;
+            case THE_END:
+                return ChatColor.YELLOW;
+            default:
+                return ChatColor.GRAY;
+        }
     }
 
     private void updateFooter(Player player) {
         Location spawn = player.getWorld().getSpawnLocation();
-        player.setPlayerListFooter("   " + ChatColor.GREEN + "Spawn znajduje się na " +
-                this.getCoordinate('X', spawn.getBlockX()) + ChatColor.GREEN + ", " +
+        ChatColor color = this.getColor(spawn.getWorld());
+        player.setPlayerListFooter("   " + color + "Spawn znajduje się na " +
+                this.getCoordinate('X', spawn.getBlockX()) + color + ", " +
                 this.getCoordinate('Z', spawn.getBlockZ()) + "   ");
     }
 

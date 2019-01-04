@@ -12,8 +12,12 @@ commands:
     permission: 'janusz.command.player'
     permission-message: 'Brak odpowiednich uprawnień'
     usage: '/<command> [player]'
-  call-match-end-event:
-    permission: 'janusz.command.call-match-end-event'
+  quit:
+    description: 'Opuść arenę PVP'
+    aliases: ['exit', 'opuść', 'wyjdź', 'surrender']
+    permission: 'janusz.command.quit'
+    permission-message: 'Brak odpowiednich uprawnień'
+    usage: '/<command>'
 
 permissions:
   'janusz.*':
@@ -25,6 +29,13 @@ permissions:
   'janusz.command.player':
     description: 'Gives access to the /player command'
     default: true
-  janusz.colored-signs:
+  'janusz.command.quit':
+    description: 'Gives access to the /quit command'
+    default: true
+
+  'janusz.colored-signs':
     description: 'Gives access to color signs'
+    default: true
+  'janusz.join-arena':
+    description: 'Gives access to join PVP arenas'
     default: true

@@ -19,6 +19,7 @@ public class Arena {
     private final String name;
 
     private final UUID worldId;
+    private final Region field;
     private final Region region;
     private final Spawn defaultSpawn;
 
@@ -27,7 +28,7 @@ public class Arena {
     private final Set<Vector3d> torches = new HashSet<>();
     private final Set<JoinSign> joinSigns = new HashSet<>();
 
-    public Arena(JanuszPlugin plugin, String name, UUID worldId, Region region, Spawn defaultSpawn) {
+    public Arena(JanuszPlugin plugin, String name, UUID worldId, Region field, Region region, Spawn defaultSpawn) {
         this.plugin = Objects.requireNonNull(plugin, "plugin");
 
         this.name = Objects.requireNonNull(name, "uniqueId");
@@ -36,6 +37,7 @@ public class Arena {
         Validate.isTrue(nameLength >= 3 && nameLength <= 16, "name too short or too long");
 
         this.worldId = Objects.requireNonNull(worldId, "worldId");
+        this.field = Objects.requireNonNull(field, "field");
         this.region = Objects.requireNonNull(region, "region");
         this.defaultSpawn = Objects.requireNonNull(defaultSpawn, "defaultSpawn");
     }
@@ -66,6 +68,10 @@ public class Arena {
 
     public Optional<World> getWorld() {
         return Optional.ofNullable(this.plugin.getServer().getWorld(this.worldId));
+    }
+
+    public Region getField() {
+        return this.field;
     }
 
     public Region getRegion() {

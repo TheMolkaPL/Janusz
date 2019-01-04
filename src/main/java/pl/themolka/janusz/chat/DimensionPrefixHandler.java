@@ -21,9 +21,8 @@ public class DimensionPrefixHandler extends JanuszPlugin.Handler {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void applyPlayerPrefix(AsyncPlayerChatEvent event) {
-        Optional.ofNullable(PREFIXES.get(event.getPlayer().getWorld().getEnvironment())).ifPresent(prefix -> {
-            event.setFormat(prefix.format(event.getFormat()));
-        });
+        Optional.ofNullable(PREFIXES.get(event.getPlayer().getWorld().getEnvironment()))
+                .ifPresent(prefix -> event.setFormat(prefix.format(event.getFormat())));
     }
 
     static class Prefix {

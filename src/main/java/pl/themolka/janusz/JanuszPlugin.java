@@ -2,12 +2,20 @@ package pl.themolka.janusz;
 
 import com.zaxxer.hikari.HikariConfig;
 import org.bukkit.Server;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.PluginCommand;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import pl.themolka.janusz.arena.ArenaHandler;
+import pl.themolka.janusz.arena.MatchResultHandler;
+import pl.themolka.janusz.arena.QuitCommandHandler;
+import pl.themolka.janusz.arena.VictoryHandler;
 import pl.themolka.janusz.arena.sign.JoinSignHandler;
 import pl.themolka.janusz.chat.ChatFormatHandler;
 import pl.themolka.janusz.chat.ChatLoggerHandler;
@@ -74,12 +82,14 @@ public final class JanuszPlugin extends JavaPlugin {
                 new JoinSignHandler(this),
                 new JoinQuitHandler(this),
                 new LocalSessionHandler(this),
+                new MatchResultHandler(this),
                 new MotdHandler(this),
                 new ObserverHandler(this),
                 new PhantomHandler(this),
                 new PlayerCommandHandler(this),
                 new PlayerListHandler(),
                 new ProfileHandler(this),
+                new QuitCommandHandler(this),
                 new SeasonHandler(this),
                 new TreeChopHandler(this),
                 new VictoryHandler()
@@ -169,6 +179,37 @@ public final class JanuszPlugin extends JavaPlugin {
             Objects.requireNonNull(plugin, "plugin");
             this.registeredListeners.forEach(plugin::unregisterEvents);
             this.registeredListeners.clear();
+        }
+    }
+
+    public static class CommandHandler extends Handler implements CommandExecutor, TabCompleter {
+        private final String name;
+
+        public CommandHandler(String name) {
+            this.name = Objects.requireNonNull(name, "name");
+        }
+
+        @Override
+        public void enable(JanuszPlugin plugin) {
+            super.enable(plugin);
+
+            PluginCommand command = plugin.getCommand(this.name);
+            command.setExecutor(this);
+            command.setTabCompleter(this);
+        }
+
+        public String getCommandName() {
+            return this.name;
+        }
+
+        @Override
+        public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+            return false;
+        }
+
+        @Override
+        public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
+            return null;
         }
     }
 }

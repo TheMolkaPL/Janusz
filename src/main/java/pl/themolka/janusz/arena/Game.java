@@ -6,6 +6,7 @@ import pl.themolka.janusz.arena.event.GameStateChangeEvent;
 import pl.themolka.janusz.profile.LocalSession;
 
 import java.util.Objects;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 public class Game {
@@ -27,7 +28,7 @@ public class Game {
 
         Validate.isTrue(minPlayerCount <= arena.getSpawns().size(), "minPlayerCount larger than number of spawns!");
 
-        this.state = this.factory.idle();
+        this.transform(this.factory.idle());
     }
 
     public Logger getLogger() {
@@ -73,11 +74,15 @@ public class Game {
         return this.state.canJoin(Objects.requireNonNull(competitor, "competitor"));
     }
 
+    public boolean isRunning() {
+        return this.state.isRunning();
+    }
+
     public boolean join(LocalSession competitor) {
         return this.state.join(Objects.requireNonNull(competitor, "competitor"));
     }
 
-    public boolean leave(LocalSession competitor) {
+    public Optional<MatchResult> leave(LocalSession competitor) {
         return this.state.leave(Objects.requireNonNull(competitor, "competitor"));
     }
 }
