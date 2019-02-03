@@ -15,6 +15,8 @@ import pl.themolka.janusz.database.Database;
 import pl.themolka.janusz.season.Season;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -109,6 +111,10 @@ public class LocalSessionHandler extends JanuszPlugin.Handler {
         return this.getLocalSession(Objects.requireNonNull(entity, "entity").getUniqueId());
     }
 
+    public List<LocalSession> getOnline() {
+        return new ArrayList<>(this.byId.values());
+    }
+
     public void removeLocalSession(LocalSession localSession) {
         Objects.requireNonNull(localSession, "localSession");
         this.byId.remove(localSession.getUniqueId());
@@ -117,13 +123,17 @@ public class LocalSessionHandler extends JanuszPlugin.Handler {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerPreLogin(AsyncPlayerPreLoginEvent event) {
+        if (!event.getLoginResult().equals(AsyncPlayerPreLoginEvent.Result.ALLOWED)) {
+            return;
+        }
+
         UUID uniqueId = event.getUniqueId();
         this.plugin.getHandler(ProfileHandler.class).ifPresent(handler -> handler.getProfile(uniqueId).ifPresent(profile -> {
             this.queue.put(uniqueId, new Login(profile));
         }));
     }
 
-    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerLogin(PlayerLoginEvent event) {
         Player player = event.getPlayer();
         UUID uniqueId = player.getUniqueId();

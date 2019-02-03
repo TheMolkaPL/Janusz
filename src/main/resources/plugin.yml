@@ -6,17 +6,28 @@ main: pl.themolka.janusz.JanuszPlugin
 api-version: '1.13'
 
 commands:
+  baza:
+    description: 'Teleportuj się do bazy twojego klanu.'
+    aliases: ["gbaza", 'ghome']
+    permission: 'janusz.command.baza'
+    permission-message: 'Brak odpowiednich uprawnień.'
+    usage: '/<command>'
   player:
     description: 'Informacje o danym graczu'
     aliases: ['gracz', 'seen', 'find']
     permission: 'janusz.command.player'
-    permission-message: 'Brak odpowiednich uprawnień'
+    permission-message: 'Brak odpowiednich uprawnień.'
     usage: '/<command> [player]'
   quit:
     description: 'Opuść arenę PVP'
     aliases: ['exit', 'opuść', 'wyjdź', 'surrender']
     permission: 'janusz.command.quit'
-    permission-message: 'Brak odpowiednich uprawnień'
+    permission-message: 'Brak odpowiednich uprawnień.'
+    usage: '/<command>'
+  reloadclans:
+    description: 'Przeładuj klany z bazy danych'
+    permission: 'janusz.command.reloadclans'
+    permission-message: 'Brak odpowiednich uprawnień.'
     usage: '/<command>'
 
 permissions:
@@ -26,12 +37,18 @@ permissions:
   'janusz.command.*':
     description: 'Gives access to all Janusz commands'
     default: op
+  'janusz.command.baza':
+    description: 'Gives access to the /baza command'
+    default: true
   'janusz.command.player':
     description: 'Gives access to the /player command'
     default: true
   'janusz.command.quit':
     description: 'Gives access to the /quit command'
     default: true
+  'janusz.command.reloadclans':
+    description: 'Gives access to the /reloadclans command'
+    default: op
 
   'janusz.colored-signs':
     description: 'Gives access to color signs'

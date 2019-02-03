@@ -55,7 +55,6 @@ public class DeathHandler extends JanuszPlugin.Handler {
         Vector3d location = new Vector3d(bukkitLocation.getX(), bukkitLocation.getY(), bukkitLocation.getZ());
         float fallDistance = victimBukkit.getFallDistance();
 
-
         EntityDamageEvent lastDamage = victimBukkit.getLastDamageCause();
 
         String cause = Optional.ofNullable(lastDamage)

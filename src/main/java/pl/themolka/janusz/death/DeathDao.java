@@ -63,12 +63,4 @@ public class DeathDao extends Dao<Death> {
             this.exceptionThrown(e);
         }
     }
-
-    private void attachLocation(PreparedStatement statement, int indexOffset,
-                                String world, Vector3d location) throws SQLException {
-        statement.setString(indexOffset, world);
-        statement.setDouble(indexOffset + 1, location.getX());
-        statement.setDouble(indexOffset + 2, location.getY());
-        statement.setDouble(indexOffset + 3, location.getZ());
-    }
 }

@@ -9,6 +9,24 @@ CREATE TABLE IF NOT EXISTS `janusz_chats` (`id` BIGINT(20) PRIMARY KEY AUTO_INCR
                                            `recipient_count` MEDIUMINT(9) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE IF NOT EXISTS `janusz_clans` (`id` BIGINT(20) PRIMARY KEY AUTO_INCREMENT,
+                                           `season_id` BIGINT(20) NOT NULL,
+                                           `team` VARCHAR(16) NOT NULL,
+                                           `title` VARCHAR(32) NOT NULL,
+                                           `color` VARCHAR(32) NOT NULL,
+                                           `world` VARCHAR(64) NOT NULL,
+                                           `home_x` DOUBLE NOT NULL,
+                                           `home_y` DOUBLE NOT NULL,
+                                           `home_z` DOUBLE NOT NULL,
+                                           `home_yaw` FLOAT NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `janusz_clan_members` (`id` BIGINT(20) PRIMARY KEY AUTO_INCREMENT,
+                                                  `season_id` BIGINT(20) NOT NULL,
+                                                  `clan_id` BIGINT(20) NOT NULL,
+                                                  `member_profile_id` BIGINT(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE IF NOT EXISTS `janusz_deaths` (`id` BIGINT(20) PRIMARY KEY AUTO_INCREMENT,
                                             `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
                                             `season_id` BIGINT(20) NOT NULL,
@@ -72,6 +90,12 @@ ALTER TABLE `janusz_chats` ADD FOREIGN KEY (`season_id`) REFERENCES `janusz_seas
 ALTER TABLE `janusz_chats` ADD FOREIGN KEY (`profile_id`) REFERENCES `janusz_profiles`(`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 ALTER TABLE `janusz_chats` ADD FOREIGN KEY (`session_id`) REFERENCES `janusz_sessions`(`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
+ALTER TABLE `janusz_clans` ADD FOREIGN KEY (`season_id`) REFERENCES `janusz_seasons`(`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE `janusz_clan_members` ADD FOREIGN KEY (`season_id`) REFERENCES `janusz_seasons`(`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE `janusz_clan_members` ADD FOREIGN KEY (`clan_id`) REFERENCES `janusz_clans`(`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE `janusz_clan_members` ADD FOREIGN KEY (`member_profile_id`) REFERENCES `janusz_profiles`(`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
 ALTER TABLE `janusz_deaths` ADD FOREIGN KEY (`season_id`) REFERENCES `janusz_seasons`(`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 ALTER TABLE `janusz_deaths` ADD FOREIGN KEY (`victim_profile_id`) REFERENCES `janusz_profiles`(`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 ALTER TABLE `janusz_deaths` ADD FOREIGN KEY (`victim_session_id`) REFERENCES `janusz_sessions`(`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
@@ -91,4 +115,4 @@ ALTER TABLE `janusz_sessions` ADD FOREIGN KEY (`season_id`) REFERENCES `janusz_s
 ALTER TABLE `janusz_sessions` ADD FOREIGN KEY (`profile_id`) REFERENCES `janusz_profiles`(`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 -- Insert the first season, so the plugin can actually run for the first time.
-INSERT INTO `janusz_seasons` (`from`) VALUES (CURRENT_TIMESTAMP);
+INSERT INTO `janusz_seasons` (`from`, `to`) VALUES (CURRENT_TIMESTAMP, NULL);

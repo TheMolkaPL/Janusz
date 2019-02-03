@@ -20,6 +20,9 @@ import pl.themolka.janusz.arena.sign.JoinSignHandler;
 import pl.themolka.janusz.chat.ChatFormatHandler;
 import pl.themolka.janusz.chat.ChatLoggerHandler;
 import pl.themolka.janusz.chat.DimensionPrefixHandler;
+import pl.themolka.janusz.clan.BazaCommandHandler;
+import pl.themolka.janusz.clan.ClanHandler;
+import pl.themolka.janusz.clan.ReloadClansCommandHandler;
 import pl.themolka.janusz.database.Database;
 import pl.themolka.janusz.death.DeathHandler;
 import pl.themolka.janusz.motd.MotdHandler;
@@ -66,20 +69,23 @@ public final class JanuszPlugin extends JavaPlugin {
         } catch (Exception e) {
             this.getLogger().log(Level.SEVERE, "Could not initialize database connection", e);
             this.getServer().shutdown(); // for security reasons
+            return;
         }
 
         this.handlers = Stream.of(
-                new ArenaHandler(this),
+//                new ArenaHandler(this),
+                new BazaCommandHandler(this),
                 new ChatFormatHandler(),
                 new ChatLoggerHandler(this),
+                new ClanHandler(this),
                 new ColoredSignsHandler(),
                 new DeathHandler(this),
                 new DimensionPrefixHandler(),
                 new FakePlayerHandler(this),
                 new FakePlayerAuthMeHandler(this),
-                new GameModeFixerHandler(),
-                new InstantTntHandler(this),
-                new JoinSignHandler(this),
+//                new GameModeFixerHandler(),
+//                new InstantTntHandler(this),
+//                new JoinSignHandler(this),
                 new JoinQuitHandler(this),
                 new LocalSessionHandler(this),
                 new MatchResultHandler(this),
@@ -90,12 +96,19 @@ public final class JanuszPlugin extends JavaPlugin {
                 new PlayerListHandler(),
                 new ProfileHandler(this),
                 new QuitCommandHandler(this),
+                new ReloadClansCommandHandler(this),
                 new SeasonHandler(this),
                 new TreeChopHandler(this),
                 new VictoryHandler()
         ).collect(Collectors.toSet());
 
+        this.getHandler(SeasonHandler.class).orElseThrow(NullPointerException::new).enable(this);
+
         for (Handler handler : this.handlers) {
+            if (handler.getClass().equals(SeasonHandler.class)) {
+                continue;
+            }
+
             logger.info("Enabling '" + handler.getClass().getSimpleName() + "'...");
             try {
                 handler.enable(this);
