@@ -54,7 +54,7 @@ public class ClanChatHandler extends JanuszPlugin.Handler {
             return;
         }
 
-        message = message.substring(1);
+        message = message.substring(1).trim();
         if (StringUtils.isEmpty(message)) {
             localSession.printError("Nie podano treści wiadomości");
             return;
