@@ -120,6 +120,10 @@ public class PlayerCommandHandler extends JanuszPlugin.CommandHandler {
         }
 
         sender.sendMessage(builder.append(".").toString());
+
+        if (sender.hasPermission("janusz.command.player.admin")) {
+            sender.sendMessage(ChatColor.RED + "Database Profile ID: " + session.getProfile().getId());
+        }
     }
 
     private String printSessionTime(Session session, boolean isDestroyed) {

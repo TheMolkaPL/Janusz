@@ -6,6 +6,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import pl.themolka.janusz.JanuszPlugin;
+import pl.themolka.janusz.clan.ClanChatHandler;
 import pl.themolka.janusz.database.Database;
 import pl.themolka.janusz.profile.LocalSessionHandler;
 import pl.themolka.janusz.season.Season;
@@ -31,6 +32,11 @@ public class ChatLoggerHandler extends JanuszPlugin.Handler {
         String text = event.getMessage();
         if (StringUtils.isEmpty(text)) {
             // This shouldn't happen anyway.
+            return;
+        }
+
+        if (text.startsWith(ClanChatHandler.CHANNEL_KEY)) {
+            // This is ugly :(
             return;
         }
 

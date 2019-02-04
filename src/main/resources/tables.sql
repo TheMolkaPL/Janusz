@@ -21,6 +21,18 @@ CREATE TABLE IF NOT EXISTS `janusz_clans` (`id` BIGINT(20) PRIMARY KEY AUTO_INCR
                                            `home_yaw` FLOAT NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+CREATE TABLE IF NOT EXISTS `janusz_clan_chats` (`id` BIGINT(20) PRIMARY KEY AUTO_INCREMENT,
+                                                `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                                                `season_id` BIGINT(20) NOT NULL,
+                                                `clan_id` BIGINT(20) NOT NULL,
+                                                `profile_id` BIGINT(20) NOT NULL,
+                                                `session_id` BIGINT(20) NOT NULL,
+                                                `world` VARCHAR(64) NOT NULL,
+                                                `text` TEXT NOT NULL,
+                                                `sent` TINYINT(1) NOT NULL DEFAULT '1',
+                                                `recipient_count` MEDIUMINT(9) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE IF NOT EXISTS `janusz_clan_members` (`id` BIGINT(20) PRIMARY KEY AUTO_INCREMENT,
                                                   `season_id` BIGINT(20) NOT NULL,
                                                   `clan_id` BIGINT(20) NOT NULL,
@@ -91,6 +103,11 @@ ALTER TABLE `janusz_chats` ADD FOREIGN KEY (`profile_id`) REFERENCES `janusz_pro
 ALTER TABLE `janusz_chats` ADD FOREIGN KEY (`session_id`) REFERENCES `janusz_sessions`(`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 ALTER TABLE `janusz_clans` ADD FOREIGN KEY (`season_id`) REFERENCES `janusz_seasons`(`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE `janusz_clan_chats` ADD FOREIGN KEY (`season_id`) REFERENCES `janusz_seasons`(`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE `janusz_clan_chats` ADD FOREIGN KEY (`clan_id`) REFERENCES `janusz_clans`(`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE `janusz_clan_chats` ADD FOREIGN KEY (`profile_id`) REFERENCES `janusz_profiles`(`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE `janusz_clan_chats` ADD FOREIGN KEY (`session_id`) REFERENCES `janusz_sessions`(`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 ALTER TABLE `janusz_clan_members` ADD FOREIGN KEY (`season_id`) REFERENCES `janusz_seasons`(`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 ALTER TABLE `janusz_clan_members` ADD FOREIGN KEY (`clan_id`) REFERENCES `janusz_clans`(`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;

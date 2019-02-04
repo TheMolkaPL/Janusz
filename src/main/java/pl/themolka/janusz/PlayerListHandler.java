@@ -38,7 +38,7 @@ public class PlayerListHandler extends JanuszPlugin.Handler {
 
     private void update(Player player) {
         Objects.requireNonNull(player, "player");
-        this.updateName(player);
+//        this.updateName(player);
         this.updateFooter(player);
     }
 

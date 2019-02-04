@@ -21,6 +21,9 @@ import pl.themolka.janusz.chat.ChatFormatHandler;
 import pl.themolka.janusz.chat.ChatLoggerHandler;
 import pl.themolka.janusz.chat.DimensionPrefixHandler;
 import pl.themolka.janusz.clan.BazaCommandHandler;
+import pl.themolka.janusz.clan.ClanChatFormatHandler;
+import pl.themolka.janusz.clan.ClanChatHandler;
+import pl.themolka.janusz.clan.ClanChatLoggerHandler;
 import pl.themolka.janusz.clan.ClanHandler;
 import pl.themolka.janusz.clan.ReloadClansCommandHandler;
 import pl.themolka.janusz.database.Database;
@@ -39,6 +42,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -77,6 +81,9 @@ public final class JanuszPlugin extends JavaPlugin {
                 new BazaCommandHandler(this),
                 new ChatFormatHandler(),
                 new ChatLoggerHandler(this),
+                new ClanChatFormatHandler(this),
+                new ClanChatHandler(this),
+                new ClanChatLoggerHandler(this),
                 new ClanHandler(this),
                 new ColoredSignsHandler(),
                 new DeathHandler(this),
@@ -100,7 +107,7 @@ public final class JanuszPlugin extends JavaPlugin {
                 new SeasonHandler(this),
                 new TreeChopHandler(this),
                 new VictoryHandler()
-        ).collect(Collectors.toSet());
+        ).collect(Collectors.toCollection(CopyOnWriteArraySet::new));
 
         this.getHandler(SeasonHandler.class).orElseThrow(NullPointerException::new).enable(this);
 

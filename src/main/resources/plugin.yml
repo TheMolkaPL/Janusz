@@ -43,6 +43,9 @@ permissions:
   'janusz.command.player':
     description: 'Gives access to the /player command'
     default: true
+  'janusz.command.player.admin':
+    description: 'Gives access to the /player command with admin information'
+    default: op
   'janusz.command.quit':
     description: 'Gives access to the /quit command'
     default: true
