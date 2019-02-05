@@ -87,7 +87,7 @@ public final class JanuszPlugin extends JavaPlugin {
                 new ClanHandler(this),
                 new ColoredSignsHandler(),
                 new DeathHandler(this),
-                new DimensionPrefixHandler(),
+//                new DimensionPrefixHandler(),
                 new FakePlayerHandler(this),
                 new FakePlayerAuthMeHandler(this),
 //                new GameModeFixerHandler(),
