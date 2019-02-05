@@ -64,6 +64,7 @@ public class ClanChatHandler extends JanuszPlugin.Handler {
                 .map(localSessionHandler::getLocalSession)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
+                .filter(session -> clan.contains(session.getProfile()))
                 .collect(Collectors.toSet());
 
         ClanChatMessageEvent messageEvent = new ClanChatMessageEvent(
