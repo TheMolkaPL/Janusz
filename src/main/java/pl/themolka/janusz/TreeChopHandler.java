@@ -2,6 +2,7 @@ package pl.themolka.janusz;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Item;
@@ -11,6 +12,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
 
 import java.util.Objects;
@@ -28,12 +31,12 @@ public class TreeChopHandler extends JanuszPlugin.Handler {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onTreeChop(BlockBreakEvent event) {
-        Block block = event.getBlock();
         Player player = event.getPlayer();
+        ItemStack tool = player.getInventory().getItemInMainHand();
 
-        if (this.canChop(player)) {
+        if (this.canChop(player, tool)) {
             ChopSession session = new ChopSession();
-            session.begin(player, block);
+            session.begin(player, event.getBlock(), tool);
         }
     }
 
@@ -68,13 +71,10 @@ public class TreeChopHandler extends JanuszPlugin.Handler {
         return this.isWood(block.getType());
     }
 
-    private boolean canChop(Player player) {
+    private boolean canChop(Player player, ItemStack tool) {
         if (player.isSneaking()) {
             return false;
-        }
-
-        ItemStack tool = player.getInventory().getItemInMainHand();
-        if (tool == null || !this.isTool(tool.getType())) {
+        } else if (tool == null || !this.isTool(tool.getType())) {
             return false;
         }
 
@@ -107,17 +107,17 @@ public class TreeChopHandler extends JanuszPlugin.Handler {
     class ChopSession {
         int broken = 0;
 
-        void begin(Player player, Block base) {
-            if (this.chop(player, base)) { // this block
+        void begin(Player player, Block base, ItemStack tool) {
+            if (this.chop(player, base, tool)) { // this block
                 this.broken++;
-                this.recursive(player, base); // blocks around
+                this.recursive(player, base, tool); // blocks around
             }
         }
 
         /**
          * Chop blocks around the given {@code base}
          */
-        void recursive(Player player, Block base) {
+        void recursive(Player player, Block base, ItemStack tool) {
             if (this.broken >= configuration.getTreeSizeLimit()) {
                 player.sendMessage(ChatColor.RED + "Za duże drzewo! :(");
                 return;
@@ -128,11 +128,11 @@ public class TreeChopHandler extends JanuszPlugin.Handler {
                     continue;
                 }
 
-                this.begin(player, base.getRelative(face));
+                this.begin(player, base.getRelative(face), tool);
             }
         }
 
-        boolean chop(Player player, Block block) {
+        boolean chop(Player player, Block block, ItemStack tool) {
             if (!canChop(block)) {
                 return false;
             }
@@ -148,7 +148,27 @@ public class TreeChopHandler extends JanuszPlugin.Handler {
             }
 
             block.setType(Material.AIR, true);
+
+            if (this.damage(tool)) {
+                inventory.remove(tool);
+                player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1F, 1F);
+            }
+
             return true;
+        }
+
+        boolean damage(ItemStack tool) {
+            ItemMeta meta = tool.getItemMeta();
+            if (meta instanceof Damageable) {
+                Damageable damageable = (Damageable) meta;
+                int damage = damageable.getDamage();
+                damageable.setDamage(damage + 1);
+                tool.setItemMeta(meta);
+
+                return tool.getDurability() >= tool.getType().getMaxDurability();
+            }
+
+            return false;
         }
     }
 }
