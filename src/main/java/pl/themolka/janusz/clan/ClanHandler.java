@@ -4,7 +4,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.scoreboard.ScoreboardManager;
 import pl.themolka.janusz.JanuszPlugin;
 import pl.themolka.janusz.database.Database;
@@ -14,7 +13,6 @@ import pl.themolka.janusz.profile.Profile;
 import pl.themolka.janusz.season.SeasonSupplier;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;

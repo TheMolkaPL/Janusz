@@ -23,7 +23,7 @@ public class JoinQuitHandler extends JanuszPlugin.Handler {
         this.plugin = Objects.requireNonNull(plugin, "plugin");
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.LOW)
     public void renameJoinMessage(PlayerJoinEvent event) {
         this.plugin.getHandler(LocalSessionHandler.class).ifPresent(
                 handler -> handler.getLocalSession(event.getPlayer()).ifPresent(session -> {
@@ -31,7 +31,7 @@ public class JoinQuitHandler extends JanuszPlugin.Handler {
         }));
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.LOW)
     public void renameQuitMessage(PlayerQuitEvent event) {
         this.plugin.getHandler(LocalSessionHandler.class).ifPresent(
                 handler -> handler.getLocalSession(event.getPlayer()).ifPresent(session -> {

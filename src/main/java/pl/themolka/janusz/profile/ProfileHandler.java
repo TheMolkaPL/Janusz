@@ -42,6 +42,7 @@ public class ProfileHandler extends JanuszPlugin.Handler {
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onPlayerPreLogin(AsyncPlayerPreLoginEvent event) {
         UUID uniqueId = event.getUniqueId();
+        this.profiles.invalidate(uniqueId);
 
         try {
             Profile profile = this.database.getExecutor().submit(() -> this.profileDao.find(uniqueId).orElseGet(() -> {

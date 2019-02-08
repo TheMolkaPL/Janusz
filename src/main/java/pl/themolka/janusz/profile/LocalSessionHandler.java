@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import pl.themolka.janusz.JanuszPlugin;
@@ -123,18 +124,20 @@ public class LocalSessionHandler extends JanuszPlugin.Handler {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerPreLogin(AsyncPlayerPreLoginEvent event) {
+        UUID uniqueId = event.getUniqueId();
+        this.queue.invalidate(uniqueId);
+
         if (!event.getLoginResult().equals(AsyncPlayerPreLoginEvent.Result.ALLOWED)) {
             return;
         }
 
-        UUID uniqueId = event.getUniqueId();
         this.plugin.getHandler(ProfileHandler.class).ifPresent(handler -> handler.getProfile(uniqueId).ifPresent(profile -> {
             this.queue.put(uniqueId, new Login(profile));
         }));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void onPlayerLogin(PlayerLoginEvent event) {
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         UUID uniqueId = player.getUniqueId();
 
