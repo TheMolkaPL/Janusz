@@ -24,7 +24,9 @@ public class SecureSpawn {
     }
 
     public Optional<Location> resolveSecure() {
-        if (this.isSecure()) {
+        if (this.spawn.getWorld() == null) {
+            return Optional.empty();
+        } else if (this.isSecure()) {
             return Optional.of(this.spawn);
         }
 

@@ -73,6 +73,11 @@ public class BazaCommandHandler extends JanuszPlugin.CommandHandler {
             return true;
         }
 
+        //
+        // TODO: make a delay between command execution and the actual
+        //  teleportation.
+        //
+
         this.teleport(player, secureHome.get());
 
         player.sendMessage(ChatColor.GREEN + "Teleportowano do bazy " + clan.getPrettyName() + ChatColor.GREEN + ". =)");
