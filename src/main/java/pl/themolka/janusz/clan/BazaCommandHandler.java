@@ -13,7 +13,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import pl.themolka.janusz.JanuszPlugin;
-import pl.themolka.janusz.database.Database;
 import pl.themolka.janusz.profile.LocalSession;
 import pl.themolka.janusz.profile.LocalSessionHandler;
 import pl.themolka.janusz.util.SecureSpawn;
