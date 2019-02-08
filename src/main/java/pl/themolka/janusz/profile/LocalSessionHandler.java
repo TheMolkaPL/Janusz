@@ -162,12 +162,14 @@ public class LocalSessionHandler extends JanuszPlugin.Handler {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerQuit(PlayerQuitEvent event) {
-        this.getLocalSession(event.getPlayer()).ifPresent(localSession -> this.database.getExecutor().submit(() -> {
+        this.getLocalSession(event.getPlayer()).ifPresent(localSession -> {
             this.removeLocalSession(localSession);
 
-            this.plugin.getLogger().info("Destroying sessions for " + localSession.getUsername() + "...");
-            this.sessionDao.destroyAllForProfile(localSession.getProfile().getId(), LocalDateTime.now());
-        }));
+            this.database.getExecutor().submit(() -> {
+                this.plugin.getLogger().info("Destroying sessions for " + localSession.getUsername() + "...");
+                this.sessionDao.destroyAllForProfile(localSession.getProfile().getId(), LocalDateTime.now());
+            });
+        });
     }
 
     class Login {
