@@ -4,7 +4,6 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import pl.themolka.janusz.database.Dao;
 import pl.themolka.janusz.database.Database;
-import pl.themolka.janusz.season.Season;
 import pl.themolka.janusz.season.SeasonSupplier;
 
 import java.sql.Connection;

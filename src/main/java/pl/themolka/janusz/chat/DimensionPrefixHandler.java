@@ -6,6 +6,7 @@ import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import pl.themolka.janusz.Configuration;
 import pl.themolka.janusz.JanuszPlugin;
 
 import java.util.Map;
@@ -19,10 +20,20 @@ public class DimensionPrefixHandler extends JanuszPlugin.Handler {
             .put(World.Environment.THE_END, new Prefix(ChatColor.YELLOW, "The End"))
             .build();
 
+    private final JanuszPlugin plugin;
+    private final Configuration configuration;
+
+    public DimensionPrefixHandler(JanuszPlugin plugin) {
+        this.plugin = Objects.requireNonNull(plugin, "plugin");
+        this.configuration = plugin.getConfiguration();
+    }
+
     @EventHandler(priority = EventPriority.HIGH)
     public void applyPlayerPrefix(AsyncPlayerChatEvent event) {
-        Optional.ofNullable(PREFIXES.get(event.getPlayer().getWorld().getEnvironment()))
-                .ifPresent(prefix -> event.setFormat(prefix.format(event.getFormat())));
+        if (this.configuration.getDimensionChatPrefix()) {
+            Optional.ofNullable(PREFIXES.get(event.getPlayer().getWorld().getEnvironment()))
+                    .ifPresent(prefix -> event.setFormat(prefix.format(event.getFormat())));
+        }
     }
 
     static class Prefix {

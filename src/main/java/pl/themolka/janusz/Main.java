@@ -2,18 +2,13 @@ package pl.themolka.janusz;
 
 import com.zaxxer.hikari.HikariConfig;
 import pl.themolka.janusz.database.Database;
-import pl.themolka.janusz.util.PrettyDurationFormatter;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.time.Duration;
-import java.time.Instant;
 import java.util.Comparator;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.TreeMap;

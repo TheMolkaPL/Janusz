@@ -8,6 +8,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerJoinEvent;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -20,16 +21,28 @@ public class GameModeFixerHandler extends JanuszPlugin.Handler {
             .expireAfterWrite(1L, TimeUnit.SECONDS)
             .build();
 
+    private final JanuszPlugin plugin;
+    private final Configuration configuration;
+
+    public GameModeFixerHandler(JanuszPlugin plugin) {
+        this.plugin = Objects.requireNonNull(plugin, "plugin");
+        this.configuration = plugin.getConfiguration();
+    }
+
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerJoinAtLowest(PlayerJoinEvent lowest) {
-        Player joiner = lowest.getPlayer();
-        this.cache.put(joiner.getUniqueId(), joiner.getGameMode());
+        if (this.configuration.getGameModeFixer()) {
+            Player joiner = lowest.getPlayer();
+            this.cache.put(joiner.getUniqueId(), joiner.getGameMode());
+        }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerJoinAtHighest(PlayerJoinEvent highest) {
-        Player joiner = highest.getPlayer();
-        Optional.ofNullable(this.cache.getIfPresent(joiner.getUniqueId()))
-                .ifPresent(joiner::setGameMode);
+        if (this.configuration.getGameModeFixer()) {
+            Player joiner = highest.getPlayer();
+            Optional.ofNullable(this.cache.getIfPresent(joiner.getUniqueId()))
+                    .ifPresent(joiner::setGameMode);
+        }
     }
 }

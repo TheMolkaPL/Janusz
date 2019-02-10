@@ -2,10 +2,7 @@ package pl.themolka.janusz.profile;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.PluginCommand;
-import org.bukkit.command.TabCompleter;
 import pl.themolka.janusz.JanuszPlugin;
 import pl.themolka.janusz.Message;
 import pl.themolka.janusz.database.Database;

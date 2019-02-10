@@ -1,7 +1,6 @@
 package pl.themolka.janusz.death;
 
 import org.apache.commons.lang3.Validate;
-import org.bukkit.event.entity.EntityDamageEvent;
 import pl.themolka.janusz.geometry.Vector3d;
 import pl.themolka.janusz.profile.Session;
 import pl.themolka.janusz.season.Season;

@@ -5,9 +5,12 @@ database:
   poolName: 'Janusz-Database-Pool'
 
 current-season-id: 1
+dimension-chat-prefix: false
 phantom-spawn-chance: 0.1
 observer-names: [TheMolkaPL]
 tree-size-limit: 100
+game-mode-fixer: false
+arena-min-player-count: 2
 
 fake-player:
   enabled: false

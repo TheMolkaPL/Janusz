@@ -37,15 +37,7 @@ public class PlayerListHandler extends JanuszPlugin.Handler {
     }
 
     private void update(Player player) {
-        Objects.requireNonNull(player, "player");
-//        this.updateName(player);
-        this.updateFooter(player);
-    }
-
-    private void updateName(Player player) {
-        String color = this.getColor(player.getWorld()).toString();
-        String name = player.getName();
-        player.setPlayerListName(color + name.substring(0, Math.min(name.length(), MAX_NAME_LENGTH - color.length())));
+        this.updateFooter(Objects.requireNonNull(player, "player"));
     }
 
     private ChatColor getColor(World world) {

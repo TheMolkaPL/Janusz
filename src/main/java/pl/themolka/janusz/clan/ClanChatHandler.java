@@ -68,7 +68,7 @@ public class ClanChatHandler extends JanuszPlugin.Handler {
                 .collect(Collectors.toSet());
 
         ClanChatMessageEvent messageEvent = new ClanChatMessageEvent(
-                event.isAsynchronous(), clan, localSession, message, recipients);
+                event.isAsynchronous(), this.plugin, clan, localSession, message, recipients);
         this.plugin.callEvent(messageEvent);
 
         if (messageEvent.isCancelled()) {

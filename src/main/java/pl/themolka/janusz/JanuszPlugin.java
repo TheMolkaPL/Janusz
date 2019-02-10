@@ -1,7 +1,6 @@
 package pl.themolka.janusz;
 
 import com.zaxxer.hikari.HikariConfig;
-import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -55,7 +54,6 @@ public final class JanuszPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        Server server = this.getServer();
         Logger logger = this.getLogger();
 
         this.saveDefaultConfig();
@@ -87,12 +85,12 @@ public final class JanuszPlugin extends JavaPlugin {
                 new ClanHandler(this),
                 new ColoredSignsHandler(),
                 new DeathHandler(this),
-//                new DimensionPrefixHandler(),
+                new DimensionPrefixHandler(this),
                 new FakePlayerHandler(this),
                 new FakePlayerAuthMeHandler(this),
-//                new GameModeFixerHandler(),
-//                new InstantTntHandler(this),
-//                new JoinSignHandler(this),
+                new GameModeFixerHandler(this),
+                new InstantTntHandler(this),
+                new JoinSignHandler(this),
                 new JoinQuitHandler(this),
                 new LocalSessionHandler(this),
                 new MatchResultHandler(this),

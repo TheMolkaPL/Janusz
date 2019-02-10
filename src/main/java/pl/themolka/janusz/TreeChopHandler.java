@@ -32,11 +32,12 @@ public class TreeChopHandler extends JanuszPlugin.Handler {
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onTreeChop(BlockBreakEvent event) {
         Player player = event.getPlayer();
+        Block block = event.getBlock();
         ItemStack tool = player.getInventory().getItemInMainHand();
 
         if (this.canChop(player, tool)) {
-            ChopSession session = new ChopSession();
-            session.begin(player, event.getBlock(), tool);
+            ChopSession session = new ChopSession(player, block, tool);
+            session.begin(block);
         }
     }
 
@@ -105,21 +106,31 @@ public class TreeChopHandler extends JanuszPlugin.Handler {
     }
 
     class ChopSession {
+        final Player player;
+        final Block base;
+        final ItemStack tool;
+
         int broken = 0;
 
-        void begin(Player player, Block base, ItemStack tool) {
-            if (this.chop(player, base, tool)) { // this block
+        ChopSession(Player player, Block base, ItemStack tool) {
+            this.player = Objects.requireNonNull(player, "player");
+            this.base = Objects.requireNonNull(base, "base");
+            this.tool = tool;
+        }
+
+        void begin(Block base) {
+            if (this.chop(base)) { // this block
                 this.broken++;
-                this.recursive(player, base, tool); // blocks around
+                this.recursive(base); // blocks around
             }
         }
 
         /**
          * Chop blocks around the given {@code base}
          */
-        void recursive(Player player, Block base, ItemStack tool) {
+        void recursive(Block base) {
             if (this.broken >= configuration.getTreeSizeLimit()) {
-                player.sendMessage(ChatColor.RED + "Za duże drzewo! :(");
+                this.player.sendMessage(ChatColor.RED + "Za duże drzewo! :(");
                 return;
             }
 
@@ -128,20 +139,20 @@ public class TreeChopHandler extends JanuszPlugin.Handler {
                     continue;
                 }
 
-                this.begin(player, base.getRelative(face), tool);
+                this.begin(base.getRelative(face));
             }
         }
 
-        boolean chop(Player player, Block block, ItemStack tool) {
+        boolean chop(Block block) {
             if (!canChop(block)) {
                 return false;
             }
 
             ItemStack itemStack = new ItemStack(block.getType(), 1);
 
-            PlayerInventory inventory = player.getInventory();
+            PlayerInventory inventory = this.player.getInventory();
             if (canReceive(inventory, itemStack.getType(), itemStack.getAmount())) {
-                player.getInventory().addItem(itemStack);
+                this.player.getInventory().addItem(itemStack);
             } else {
                 Item item = block.getWorld().dropItem(block.getLocation(), itemStack);
                 item.setVelocity(NO_VELOCITY.clone());
@@ -149,9 +160,9 @@ public class TreeChopHandler extends JanuszPlugin.Handler {
 
             block.setType(Material.AIR, true);
 
-            if (this.damage(tool)) {
-                inventory.remove(tool);
-                player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1F, 1F);
+            if (this.tool != null && this.damage(this.tool)) {
+                inventory.remove(this.tool);
+                this.player.playSound(this.player.getLocation(), Sound.ENTITY_ITEM_BREAK, 1F, 1F);
             }
 
             return true;
@@ -161,8 +172,7 @@ public class TreeChopHandler extends JanuszPlugin.Handler {
             ItemMeta meta = tool.getItemMeta();
             if (meta instanceof Damageable) {
                 Damageable damageable = (Damageable) meta;
-                int damage = damageable.getDamage();
-                damageable.setDamage(damage + 1);
+                damageable.setDamage(damageable.getDamage() + 1);
                 tool.setItemMeta(meta);
 
                 return tool.getDurability() >= tool.getType().getMaxDurability();

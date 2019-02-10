@@ -7,6 +7,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import pl.themolka.janusz.Configuration;
 import pl.themolka.janusz.JanuszPlugin;
 import pl.themolka.janusz.arena.sign.JoinSign;
 import pl.themolka.janusz.geometry.Cuboid;
@@ -29,7 +30,11 @@ public class ArenaHandler extends JanuszPlugin.Handler {
     public ArenaHandler(JanuszPlugin plugin) {
         this.plugin = Objects.requireNonNull(plugin, "plugin");
 
-        this.game = new Game(plugin, this.plugin.getLogger(), this.createDefaultArena(), 2);
+        Configuration configuration = plugin.getConfiguration();
+        int minPlayerCount = configuration.getArenaMinPlayerCount();
+        Arena arena = this.createDefaultArena();
+
+        this.game = new Game(plugin, this.plugin.getLogger(), arena, minPlayerCount);
     }
 
     @Override

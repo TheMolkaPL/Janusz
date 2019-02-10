@@ -143,7 +143,7 @@ public class FakePlayerHandler extends JanuszPlugin.Handler {
         } finally {
             this.session = new FakePlayerSession(fakePlayer);
 
-            this.server.getPluginManager().callEvent(new FakePlayerRegisterEvent(this, this.session));
+            this.server.getPluginManager().callEvent(new FakePlayerRegisterEvent(this.plugin, this, this.session));
         }
     }
 
@@ -191,13 +191,14 @@ public class FakePlayerHandler extends JanuszPlugin.Handler {
         }
     }
 
-    public static class FakePlayerRegisterEvent extends Event {
+    public static class FakePlayerRegisterEvent extends JanuszEvent {
         private static final HandlerList handlerList = new HandlerList();
 
         private FakePlayerHandler handler;
         private FakePlayerSession session;
 
-        public FakePlayerRegisterEvent(FakePlayerHandler handler, FakePlayerSession session) {
+        public FakePlayerRegisterEvent(JanuszPlugin plugin, FakePlayerHandler handler, FakePlayerSession session) {
+            super(plugin);
             this.handler = Objects.requireNonNull(handler, "handler");
             this.session = Objects.requireNonNull(session, "session");
         }

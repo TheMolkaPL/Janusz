@@ -2,7 +2,6 @@ package pl.themolka.janusz.death;
 
 import pl.themolka.janusz.database.Dao;
 import pl.themolka.janusz.database.Database;
-import pl.themolka.janusz.geometry.Vector3d;
 import pl.themolka.janusz.profile.Session;
 
 import java.sql.Connection;

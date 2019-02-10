@@ -7,7 +7,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.scoreboard.ScoreboardManager;
 import pl.themolka.janusz.JanuszPlugin;
 import pl.themolka.janusz.database.Database;
-import pl.themolka.janusz.profile.LocalSession;
 import pl.themolka.janusz.profile.LocalSessionHandler;
 
 import java.util.List;

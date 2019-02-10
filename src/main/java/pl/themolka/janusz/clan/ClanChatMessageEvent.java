@@ -1,21 +1,23 @@
 package pl.themolka.janusz.clan;
 
 import org.bukkit.event.Cancellable;
-import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import pl.themolka.janusz.JanuszEvent;
+import pl.themolka.janusz.JanuszPlugin;
 import pl.themolka.janusz.profile.LocalSession;
 
 import java.util.Objects;
 import java.util.Set;
 
-public class ClanChatMessageEvent extends Event implements Cancellable {
+public class ClanChatMessageEvent extends JanuszEvent implements Cancellable {
     private final Clan clan;
     private final LocalSession sender;
     private final String message;
     private final Set<LocalSession> recipients;
 
-    public ClanChatMessageEvent(boolean async, Clan clan, LocalSession sender, String message, Set<LocalSession> recipients) {
-        super(async);
+    public ClanChatMessageEvent(boolean async, JanuszPlugin plugin, Clan clan, LocalSession sender,
+                                String message, Set<LocalSession> recipients) {
+        super(async, plugin);
 
         this.clan = Objects.requireNonNull(clan, "clan");
         this.sender = Objects.requireNonNull(sender, "sender");

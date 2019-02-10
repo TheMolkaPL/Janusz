@@ -1,6 +1,5 @@
 package pl.themolka.janusz.motd;
 
-import org.apache.commons.lang3.RandomUtils;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.server.ServerListPingEvent;
