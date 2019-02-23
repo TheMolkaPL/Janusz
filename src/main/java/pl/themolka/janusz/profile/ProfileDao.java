@@ -34,13 +34,56 @@ public class ProfileDao extends Dao<Profile> {
         return Optional.empty();
     }
 
-    public Optional<Profile> find(UUID uniqueId) {
+    public Optional<Profile> find(UUID uniqueId, boolean online, boolean offline) {
         Objects.requireNonNull(uniqueId, "uniqueId");
+
+        FindQuery query;
+        if (online && offline) {
+            query = new FindQuery() {
+                @Override
+                public String where() {
+                    return "`uuid`=? OR `offline_uuid`=?";
+                }
+
+                @Override
+                public void prepare(PreparedStatement statement) throws SQLException {
+                    String string = uniqueId.toString();
+                    statement.setString(1, string);
+                    statement.setString(2, string);
+                }
+            };
+        } else if (online) {
+            query = new FindQuery() {
+                @Override
+                public String where() {
+                    return "`uuid`=?;";
+                }
+
+                @Override
+                public void prepare(PreparedStatement statement) throws SQLException {
+                    statement.setString(1, uniqueId.toString());
+                }
+            };
+        } else if (offline) {
+            query = new FindQuery() {
+                @Override
+                public String where() {
+                    return "`offline_uuid`=?;";
+                }
+
+                @Override
+                public void prepare(PreparedStatement statement) throws SQLException {
+                    statement.setString(1, uniqueId.toString());
+                }
+            };
+        } else {
+            throw new IllegalStateException("online or/and offline must be defined to true.");
+        }
 
         try (Connection connection = this.database.getConnection()) {
             PreparedStatement statement = connection.prepareStatement(
-                    "SELECT * FROM `janusz_profiles` WHERE `uuid`=? LIMIT 1;");
-            statement.setString(1, uniqueId.toString());
+                    "SELECT * FROM `janusz_profiles` WHERE " + query.where() + " LIMIT 1;");
+            query.prepare(statement);
 
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
@@ -58,9 +101,10 @@ public class ProfileDao extends Dao<Profile> {
 
         try (Connection connection = this.database.getConnection()) {
             PreparedStatement statement = connection.prepareStatement(
-                    "INSERT INTO `janusz_profiles` (`uuid`) VALUES (?);",
+                    "INSERT INTO `janusz_profiles` (`uuid`, `offline_uuid`) VALUES (?, ?);",
                     Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, profile.getUniqueId().toString());
+            statement.setString(2, profile.getOfflineId().toString());
 
             statement.executeUpdate();
             try (ResultSet resultSet = statement.getGeneratedKeys()) {
@@ -69,5 +113,11 @@ public class ProfileDao extends Dao<Profile> {
                 }
             }
         }
+    }
+
+    interface FindQuery {
+        String where();
+
+        void prepare(PreparedStatement statement) throws SQLException;
     }
 }

@@ -13,6 +13,7 @@ public class Configuration {
     private final boolean dimensionChatPrefix;
     private final double phantomSpawnChance;
     private final List<String> observerNames;
+    private final boolean treeChopEnabled;
     private final int treeSizeLimit;
     private final boolean gameModeFixer;
     private final FakePlayer fakePlayer;
@@ -24,6 +25,7 @@ public class Configuration {
         this.dimensionChatPrefix = config.getBoolean("dimension-chat-prefix", false);
         this.phantomSpawnChance = config.getDouble("phantom-spawn-chance");
         this.observerNames = config.getStringList("observer-names");
+        this.treeChopEnabled = config.getBoolean("tree-chop-enabled", true);
         this.treeSizeLimit = config.getInt("tree-size-limit");
         this.gameModeFixer = config.getBoolean("game-mode-fixer", false);
         this.fakePlayer = new FakePlayer(config.getConfigurationSection("fake-player"));
@@ -48,6 +50,10 @@ public class Configuration {
 
     public List<String> getObserverNames() {
         return new ArrayList<>(this.observerNames);
+    }
+
+    public boolean getTreeChopEnabled() {
+        return this.treeChopEnabled;
     }
 
     public int getTreeSizeLimit() {

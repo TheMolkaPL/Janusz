@@ -31,6 +31,10 @@ public class TreeChopHandler extends JanuszPlugin.Handler {
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     public void onTreeChop(BlockBreakEvent event) {
+        if (!this.configuration.getTreeChopEnabled()) {
+            return;
+        }
+
         Player player = event.getPlayer();
         Block block = event.getBlock();
         ItemStack tool = player.getInventory().getItemInMainHand();

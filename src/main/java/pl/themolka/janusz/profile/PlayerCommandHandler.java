@@ -75,7 +75,7 @@ public class PlayerCommandHandler extends JanuszPlugin.CommandHandler {
     }
 
     private void findByUniqueId(CommandSender sender, String query, UUID uniqueId) {
-        Optional<Profile> profile = this.profileDao.find(uniqueId);
+        Optional<Profile> profile = this.profileDao.find(uniqueId, true, true); // find both online and offline
         if (profile.isPresent()) {
             this.findByProfile(sender, query, profile.get());
         } else {

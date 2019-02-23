@@ -3,6 +3,7 @@ package pl.themolka.janusz.profile;
 import org.apache.commons.lang3.Validate;
 import pl.themolka.janusz.Message;
 
+import java.nio.charset.StandardCharsets;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Objects;
@@ -11,14 +12,17 @@ import java.util.UUID;
 public class Profile {
     public static final String FIELD_ID = "id";
     public static final String FIELD_UUID = "uuid";
+    public static final String FIELD_OFFLINE_UUID = "offline_uuid";
     public static final String FIELD_SEX = "sex";
 
     private long id;
     private final UUID uniqueId;
+    private final UUID offlineId;
     private final Sex sex;
 
-    public Profile(UUID uniqueId) {
+    public Profile(UUID uniqueId, UUID offlineId) {
         this.uniqueId = Objects.requireNonNull(uniqueId, "uniqueId");
+        this.offlineId = Objects.requireNonNull(offlineId, "offlineId");
         this.sex = Sex.UNISEX;
     }
 
@@ -26,6 +30,7 @@ public class Profile {
         Objects.requireNonNull(resultSet, "resultSet");
         this.id = resultSet.getLong(FIELD_ID);
         this.uniqueId = UUID.fromString(resultSet.getString(FIELD_UUID));
+        this.offlineId = UUID.fromString(resultSet.getString(FIELD_OFFLINE_UUID));
         this.sex = Sex.deserialize(resultSet.getString(FIELD_SEX));
     }
 
@@ -54,6 +59,10 @@ public class Profile {
         return this.uniqueId;
     }
 
+    public UUID getOfflineId() {
+        return this.offlineId;
+    }
+
     public Sex getSex() {
         return this.sex;
     }
@@ -61,5 +70,9 @@ public class Profile {
     public void setId(long id) {
         Validate.isTrue(id >= 0, "id is negative");
         this.id = id;
+    }
+
+    public static UUID getOfflineId(String username) {
+        return UUID.nameUUIDFromBytes(("OfflinePlayer:" + username).getBytes(StandardCharsets.UTF_8));
     }
 }

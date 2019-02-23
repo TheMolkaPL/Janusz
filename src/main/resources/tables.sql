@@ -81,6 +81,7 @@ CREATE TABLE IF NOT EXISTS `janusz_motds` (`id` BIGINT(20) PRIMARY KEY AUTO_INCR
 
 CREATE TABLE IF NOT EXISTS `janusz_profiles` (`id` BIGINT(20) PRIMARY KEY AUTO_INCREMENT,
                                               `uuid` CHAR(36) NOT NULL UNIQUE,
+                                              `offline_uuid` CHAR(36) NOT NULL UNIQUE,
                                               `sex` VARCHAR(16) NOT NULL DEFAULT 'unisex'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
