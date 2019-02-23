@@ -47,14 +47,15 @@ public class ProfileHandler extends JanuszPlugin.Handler {
         UUID offlineId;
         if (this.plugin.getServer().getOnlineMode()) {
             offlineId = Profile.getOfflineId(event.getName());
+            this.plugin.getLogger().log(Level.INFO, "Offline UUID of '" + uniqueId + "' is '" + offlineId + "'.");
         } else {
             offlineId = uniqueId;
         }
 
         try {
-            Profile profile = this.database.getExecutor().submit(() -> this.profileDao.find(uniqueId, true, true).orElseGet(() -> {
+            Profile profile = this.database.getExecutor().submit(() -> this.profileDao.find(uniqueId, offlineId).orElseGet(() -> {
                 try {
-                    this.plugin.getLogger().info("Havn't seen profile '" + uniqueId + "' yet. Registering him for the first time...");
+                    this.plugin.getLogger().info("Haven't seen profile '" + uniqueId + "' yet. Registering him for the first time...");
                     Profile save = new Profile(uniqueId, offlineId);
                     this.profileDao.save(save);
                     return save;

@@ -34,55 +34,27 @@ public class ProfileDao extends Dao<Profile> {
         return Optional.empty();
     }
 
-    public Optional<Profile> find(UUID uniqueId, boolean online, boolean offline) {
-        Objects.requireNonNull(uniqueId, "uniqueId");
+    public Optional<Profile> find(UUID uniqueId) {
+        return this.find(uniqueId, uniqueId);
+    }
 
-        FindQuery query;
-        if (online && offline) {
-            query = new FindQuery() {
-                @Override
-                public String where() {
-                    return "`uuid`=? OR `offline_uuid`=?";
-                }
+    public Optional<Profile> find(UUID uniqueId, UUID offlineId) {
+        return this.find(uniqueId, offlineId, true, true);
+    }
 
-                @Override
-                public void prepare(PreparedStatement statement) throws SQLException {
-                    String string = uniqueId.toString();
-                    statement.setString(1, string);
-                    statement.setString(2, string);
-                }
-            };
-        } else if (online) {
-            query = new FindQuery() {
-                @Override
-                public String where() {
-                    return "`uuid`=?;";
-                }
-
-                @Override
-                public void prepare(PreparedStatement statement) throws SQLException {
-                    statement.setString(1, uniqueId.toString());
-                }
-            };
-        } else if (offline) {
-            query = new FindQuery() {
-                @Override
-                public String where() {
-                    return "`offline_uuid`=?;";
-                }
-
-                @Override
-                public void prepare(PreparedStatement statement) throws SQLException {
-                    statement.setString(1, uniqueId.toString());
-                }
-            };
-        } else {
-            throw new IllegalStateException("online or/and offline must be defined to true.");
+    public Optional<Profile> find(UUID uniqueId, UUID offlineId, boolean online, boolean offline) {
+        if (uniqueId == null) {
+            uniqueId = Objects.requireNonNull(offlineId, "offlineId");
+        } else if (offlineId == null) {
+            offlineId = Objects.requireNonNull(uniqueId, "uniqueId");
         }
+
+        FindQuery query = this.resolveFindQuery(offlineId, online, offline);
 
         try (Connection connection = this.database.getConnection()) {
             PreparedStatement statement = connection.prepareStatement(
                     "SELECT * FROM `janusz_profiles` WHERE " + query.where() + " LIMIT 1;");
+            statement.setString(1, uniqueId.toString());
             query.prepare(statement);
 
             ResultSet resultSet = statement.executeQuery();
@@ -115,9 +87,34 @@ public class ProfileDao extends Dao<Profile> {
         }
     }
 
+    private FindQuery resolveFindQuery(UUID offlineId, boolean online, boolean offline) {
+        if (online && offline) {
+            Objects.requireNonNull(offlineId, "offlineId");
+
+            return new FindQuery() {
+                @Override
+                public String where() {
+                    return "`uuid`=? OR `offline_uuid`=?";
+                }
+
+                @Override
+                public void prepare(PreparedStatement statement) throws SQLException {
+                    statement.setString(2, offlineId.toString());
+                }
+            };
+        } else if (online) {
+            return () -> "`uuid`=?;";
+        } else if (offline) {
+            return () -> "`offline_uuid`=?;";
+        } else {
+            throw new IllegalArgumentException("online or/and offline must be defined to true.");
+        }
+    }
+
     interface FindQuery {
         String where();
 
-        void prepare(PreparedStatement statement) throws SQLException;
+        default void prepare(PreparedStatement statement) throws SQLException {
+        }
     }
 }
