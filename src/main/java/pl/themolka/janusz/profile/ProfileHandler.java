@@ -44,8 +44,10 @@ public class ProfileHandler extends JanuszPlugin.Handler {
         UUID uniqueId = event.getUniqueId();
         this.profiles.invalidate(uniqueId);
 
+        boolean online = this.plugin.getServer().getOnlineMode();
+
         UUID offlineId;
-        if (this.plugin.getServer().getOnlineMode()) {
+        if (online) {
             offlineId = Profile.getOfflineId(event.getName());
             this.plugin.getLogger().log(Level.INFO, "Offline UUID of '" + uniqueId + "' is '" + offlineId + "'.");
         } else {
@@ -53,16 +55,22 @@ public class ProfileHandler extends JanuszPlugin.Handler {
         }
 
         try {
-            Profile profile = this.database.getExecutor().submit(() -> this.profileDao.find(uniqueId, offlineId).orElseGet(() -> {
-                try {
-                    this.plugin.getLogger().info("Haven't seen profile '" + uniqueId + "' yet. Registering him for the first time...");
-                    Profile save = new Profile(uniqueId, offlineId);
-                    this.profileDao.save(save);
-                    return save;
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-            })).get(10L, TimeUnit.SECONDS);
+            Profile profile = this.database.getExecutor().submit(() -> {
+                Profile result = this.profileDao.find(uniqueId, offlineId, online, !online).orElseGet(() -> {
+                    try {
+                        this.plugin.getLogger().info("Haven't seen profile '" + uniqueId + "' yet. Registering him for the first time...");
+                        Profile save = new Profile(uniqueId, offlineId);
+                        this.profileDao.save(save);
+                        return save;
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+
+                this.profileDao.updateOfflineId(result);
+
+                return result;
+            }).get(10L, TimeUnit.SECONDS);
 
             this.plugin.getLogger().info("Logging in '" + profile.getUniqueId() + "' (" + profile.getId() + ")...");
             this.profiles.put(uniqueId, profile);

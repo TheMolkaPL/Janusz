@@ -87,6 +87,19 @@ public class ProfileDao extends Dao<Profile> {
         }
     }
 
+    public void updateOfflineId(Profile profile) throws SQLException {
+        Objects.requireNonNull(profile, "profile");
+
+        try (Connection connection = this.database.getConnection()) {
+            PreparedStatement statement = connection.prepareStatement(
+                    "UPDATE `janusz_profiles` SET `offline_uuid`=? WHERE `id`=? LIMIT 1;");
+            statement.setString(1, profile.getOfflineId().toString());
+            statement.setLong(2, profile.getId());
+
+            statement.executeUpdate();
+        }
+    }
+
     private FindQuery resolveFindQuery(UUID offlineId, boolean online, boolean offline) {
         if (online && offline) {
             Objects.requireNonNull(offlineId, "offlineId");
@@ -103,9 +116,9 @@ public class ProfileDao extends Dao<Profile> {
                 }
             };
         } else if (online) {
-            return () -> "`uuid`=?;";
+            return () -> "`uuid`=?";
         } else if (offline) {
-            return () -> "`offline_uuid`=?;";
+            return () -> "`offline_uuid`=?";
         } else {
             throw new IllegalArgumentException("online or/and offline must be defined to true.");
         }
