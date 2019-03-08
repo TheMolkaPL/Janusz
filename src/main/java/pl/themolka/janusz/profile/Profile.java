@@ -18,12 +18,11 @@ public class Profile {
     private long id;
     private final UUID uniqueId;
     private final UUID offlineId;
-    private final Sex sex;
+    private Sex sex = Sex.UNISEX;
 
     public Profile(UUID uniqueId, UUID offlineId) {
         this.uniqueId = Objects.requireNonNull(uniqueId, "uniqueId");
         this.offlineId = Objects.requireNonNull(offlineId, "offlineId");
-        this.sex = Sex.UNISEX;
     }
 
     public Profile(ResultSet resultSet) throws SQLException {
@@ -70,6 +69,10 @@ public class Profile {
     public void setId(long id) {
         Validate.isTrue(id >= 0, "id is negative");
         this.id = id;
+    }
+
+    public void setSex(Sex sex) {
+        this.sex = Objects.requireNonNull(sex, "sex");
     }
 
     public static UUID getOfflineId(String username) {

@@ -31,6 +31,7 @@ import pl.themolka.janusz.motd.MotdHandler;
 import pl.themolka.janusz.profile.LocalSessionHandler;
 import pl.themolka.janusz.profile.PlayerCommandHandler;
 import pl.themolka.janusz.profile.ProfileHandler;
+import pl.themolka.janusz.profile.SexCommandHandler;
 import pl.themolka.janusz.season.SeasonHandler;
 import pl.themolka.janusz.season.SeasonSupplier;
 
@@ -83,6 +84,7 @@ public final class JanuszPlugin extends JavaPlugin {
                 new ClanChatHandler(this),
                 new ClanChatLoggerHandler(this),
                 new ClanHandler(this),
+                new CloseDoorsCommand(),
                 new ColoredSignsHandler(),
                 new DeathHandler(this),
                 new DimensionPrefixHandler(this),
@@ -103,6 +105,7 @@ public final class JanuszPlugin extends JavaPlugin {
                 new QuitCommandHandler(this),
                 new ReloadClansCommandHandler(this),
                 new SeasonHandler(this),
+                new SexCommandHandler(this),
                 new TreeChopHandler(this),
                 new VictoryHandler()
         ).collect(Collectors.toCollection(CopyOnWriteArraySet::new));

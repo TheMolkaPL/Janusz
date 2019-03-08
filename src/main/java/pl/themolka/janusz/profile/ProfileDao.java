@@ -100,6 +100,21 @@ public class ProfileDao extends Dao<Profile> {
         }
     }
 
+    public void updateSex(Profile profile) {
+        Objects.requireNonNull(profile, "profile");
+
+        try (Connection connection = this.database.getConnection()) {
+            PreparedStatement statement = connection.prepareStatement(
+                    "UPDATE `janusz_profiles` SET `sex`=? WHERE `id`=? LIMIT 1;");
+            statement.setString(1, profile.getSex().serialize());
+            statement.setLong(2, profile.getId());
+
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            this.exceptionThrown(e);
+        }
+    }
+
     private FindQuery resolveFindQuery(UUID offlineId, boolean online, boolean offline) {
         if (online && offline) {
             Objects.requireNonNull(offlineId, "offlineId");

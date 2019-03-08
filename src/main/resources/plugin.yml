@@ -8,27 +8,38 @@ api-version: '1.13'
 commands:
   baza:
     description: 'Teleportuj się do bazy twojego klanu.'
-    aliases: ["gbaza", 'ghome']
+    aliases: ['gbaza', 'ghome']
     permission: 'janusz.command.baza'
-    permission-message: 'Brak odpowiednich uprawnień.'
+    permission-message: '§cBrak odpowiednich uprawnień.'
+    usage: '/<command>'
+  closedoors:
+    description: 'Zamknij wszystkie drzwi na załadowanych w tym świecie chunkach.'
+    permission: 'janusz.command.closedoors'
+    permission-message: '§cBrak odpowiednich uprawnień.'
     usage: '/<command>'
   player:
     description: 'Informacje o danym graczu'
     aliases: ['gracz', 'seen', 'find']
     permission: 'janusz.command.player'
-    permission-message: 'Brak odpowiednich uprawnień.'
+    permission-message: '§cBrak odpowiednich uprawnień.'
     usage: '/<command> [player]'
   quit:
     description: 'Opuść arenę PVP'
     aliases: ['exit', 'opuść', 'wyjdź', 'surrender']
     permission: 'janusz.command.quit'
-    permission-message: 'Brak odpowiednich uprawnień.'
+    permission-message: '§cBrak odpowiednich uprawnień.'
     usage: '/<command>'
   reloadclans:
     description: 'Przeładuj klany z bazy danych'
     permission: 'janusz.command.reloadclans'
-    permission-message: 'Brak odpowiednich uprawnień.'
+    permission-message: '§cBrak odpowiednich uprawnień.'
     usage: '/<command>'
+  sex:
+    description: 'Informacje o płci i jej zmiana'
+    aliases: ['gender']
+    permission: 'janusz.command.sex'
+    permission-message: '§cBrak odpowiednich uprawnień.'
+    usage: '<command> [sex]'
 
 permissions:
   'janusz.*':
@@ -40,6 +51,9 @@ permissions:
   'janusz.command.baza':
     description: 'Gives access to the /baza command'
     default: true
+  'janusz.command.closedoors':
+    description: 'Gives access to the /closedoors command'
+    default: op
   'janusz.command.player':
     description: 'Gives access to the /player command'
     default: true
@@ -52,6 +66,12 @@ permissions:
   'janusz.command.reloadclans':
     description: 'Gives access to the /reloadclans command'
     default: op
+  'janusz.command.sex':
+    description: 'Gives access to the /sex command'
+    default: true
+  'janusz.command.sex.change':
+    description: 'Gives access to the /sex <sex> command'
+    default: true
 
   'janusz.colored-signs':
     description: 'Gives access to color signs'

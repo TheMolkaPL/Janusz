@@ -14,6 +14,9 @@ import java.util.Objects;
 import java.util.Optional;
 
 public class LocalSession extends Session {
+    public static final ChatColor ERROR = ChatColor.RED;
+    public static final ChatColor SUCCESS = ChatColor.GREEN;
+
     protected final JanuszPlugin plugin;
 
     private final Reference<Player> bukkit;
@@ -59,7 +62,7 @@ public class LocalSession extends Session {
     }
 
     public void printError(String error) {
-        this.print(ChatColor.RED + Objects.requireNonNull(error, "error"));
+        this.print(ERROR + Objects.requireNonNull(error, "error"));
     }
 
     public void printSuccess(Message success) {
@@ -67,6 +70,6 @@ public class LocalSession extends Session {
     }
 
     public void printSuccess(String success) {
-        this.print(ChatColor.GREEN + Objects.requireNonNull(success, "success"));
+        this.print(SUCCESS + Objects.requireNonNull(success, "success"));
     }
 }
