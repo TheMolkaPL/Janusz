@@ -4,7 +4,7 @@ description: 'Plugin na Janusza'
 author: 'TheMolkaPL <themolkapl@gmail.com>'
 website: 'https://github.com/TheMolkaPL/Janusz'
 main: pl.themolka.janusz.JanuszPlugin
-api-version: '1.13'
+api-version: '1.14'
 
 commands:
   baza:
