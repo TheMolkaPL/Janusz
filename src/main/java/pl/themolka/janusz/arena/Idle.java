@@ -78,7 +78,6 @@ public class Idle extends GameState.Queue {
     }
 
     private static void sendAction(Player receiver, BaseComponent[] content) {
-        receiver.sendMessage(TextComponent.toLegacyText(content));
-        // TODO send action messages using Spigot API
+        receiver.spigot().sendMessage(ChatMessageType.ACTION_BAR, content);
     }
 }
