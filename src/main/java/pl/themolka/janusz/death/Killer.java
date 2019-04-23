@@ -1,15 +1,17 @@
 package pl.themolka.janusz.death;
 
+import org.bukkit.NamespacedKey;
+
 import java.util.Objects;
 
 public class Killer {
-    private final String type;
+    private final NamespacedKey type;
 
-    public Killer(String type) {
+    public Killer(NamespacedKey type) {
         this.type = Objects.requireNonNull(type, "type");
     }
 
-    public String getType() {
+    public NamespacedKey getType() {
         return this.type;
     }
 }

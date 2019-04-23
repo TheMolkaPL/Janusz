@@ -1,7 +1,7 @@
 package pl.themolka.janusz.clan;
 
-import org.apache.commons.lang3.Validate;
-import org.bukkit.ChatColor;
+import net.md_5.bungee.api.ChatColor;
+import org.apache.commons.lang.Validate;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.scoreboard.Scoreboard;
@@ -15,6 +15,7 @@ import pl.themolka.janusz.season.SeasonSupplier;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -44,8 +45,7 @@ public class Clan {
 
     public Clan(Season season, String team, String title, ChatColor color,
                 String world, Vector3d home, float homeYaw, Set<Long> members) {
-        Objects.requireNonNull(color, "color");
-        Validate.isTrue(!color.isFormat(), "color cannot be format");
+        this.validateColor(color);
 
         this.season = Objects.requireNonNull(season, "season");
         this.team = Objects.requireNonNull(team);
@@ -67,21 +67,38 @@ public class Clan {
         this.team = resultSet.getString(FIELD_TEAM);
         this.title = resultSet.getString(FIELD_TITLE);
 
-        String colorInput = resultSet.getString(FIELD_COLOR);
-        ChatColor color = null;
-        for (ChatColor value : ChatColor.values()) {
-            if (colorInput.equals(value.asBungee().getName())) {
-                color = value;
-                break;
-            }
-        }
-        this.color = Optional.ofNullable(color).orElseThrow(IllegalArgumentException::new);
+        this.color = Optional.ofNullable(parseChatColor(resultSet.getString(FIELD_COLOR)))
+                .orElseThrow(IllegalArgumentException::new);
 
         this.world = resultSet.getString(FIELD_WORLD);
         this.home = this.parseHome(resultSet);
         this.homeYaw = resultSet.getFloat(FIELD_HOME_YAW);
 
         this.members.addAll(Objects.requireNonNull(members, "members"));
+    }
+
+    private void validateColor(ChatColor color) {
+        Objects.requireNonNull(color, "color");
+        switch (color) {
+            case MAGIC:
+            case BOLD:
+            case STRIKETHROUGH:
+            case UNDERLINE:
+            case ITALIC:
+            case RESET:
+                throw new IllegalArgumentException("color cannot be format");
+        }
+    }
+
+    private ChatColor parseChatColor(String input) {
+        for (ChatColor color : ChatColor.values()) {
+            if (color.getName().equalsIgnoreCase(input)) {
+                this.validateColor(color);
+                return color;
+            }
+        }
+
+        return null;
     }
 
     private Vector3d parseHome(ResultSet resultSet) throws SQLException {
@@ -159,7 +176,8 @@ public class Clan {
 
         Team team = this.getBukkit(scoreboardManager);
         team.setDisplayName(this.title);
-        team.setColor(this.color);
+        team.setColor(org.bukkit.ChatColor.getByChar(this.color.toString().substring(1, 2)));
+        // ^ FIXME https://github.com/SpigotMC/BungeeCord/pull/2627
         team.setPrefix(this.color.toString());
         team.setAllowFriendlyFire(true);
         team.setCanSeeFriendlyInvisibles(true);

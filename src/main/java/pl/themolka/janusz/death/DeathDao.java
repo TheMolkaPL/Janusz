@@ -38,7 +38,7 @@ public class DeathDao extends Dao<Death> {
 
             Killer killer = death.getKiller().orElse(null);
             if (killer != null) {
-                statement.setString(12, killer.getType());
+                statement.setString(12, killer.getType().toString());
             } else {
                 statement.setNull(12, Types.VARCHAR);
             }

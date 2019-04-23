@@ -1,6 +1,6 @@
 package pl.themolka.janusz.clan;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -81,8 +81,10 @@ public class ClanChatHandler extends JanuszPlugin.Handler {
         this.plugin.getLogger().log(Level.INFO, "[Clan-Chat] [" + messageEvent.getClan().getId() +
                 "] " + username + ": " + finalMessage);
 
-        String recipientMessage = clan.getColor() + ChatColor.ITALIC.toString() + "[KLAN] " +
-                ChatColor.RESET + clan.getColor() + username + ": " + ChatColor.GRAY + finalMessage;
+        String color = clan.getColor().toString();
+
+        String recipientMessage = color + ChatColor.ITALIC.toString() + "[KLAN] " +
+                ChatColor.RESET + color + username + ": " + ChatColor.GRAY + finalMessage;
         for (LocalSession recipient : messageEvent.getRecipients()) {
             recipient.print(recipientMessage);
         }

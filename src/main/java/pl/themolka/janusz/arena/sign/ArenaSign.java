@@ -1,6 +1,6 @@
 package pl.themolka.janusz.arena.sign;
 
-import org.apache.commons.lang3.Validate;
+import org.apache.commons.lang.Validate;
 import org.bukkit.World;
 import org.bukkit.block.Sign;
 import org.bukkit.event.player.PlayerInteractEvent;

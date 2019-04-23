@@ -1,7 +1,5 @@
 package pl.themolka.janusz.arena.sign;
 
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -64,7 +62,7 @@ public class JoinSignHandler extends JanuszPlugin.Handler {
 
         sessionHandler.getLocalSession(player).ifPresent(clicker -> this.findSign(clicked.getLocation()).ifPresent(pair -> {
             if (player.hasPermission("janusz.join-arena")) {
-                pair.getRight().click(pair.getLeft(), clicker, event);
+                pair.sign.click(pair.game, clicker, event);
             } else {
                 clicker.printError("Brak odpowiednich uprawnień");
             }
@@ -75,7 +73,7 @@ public class JoinSignHandler extends JanuszPlugin.Handler {
         return !Objects.requireNonNull(clicker, "clicker").getGameMode().equals(GameMode.SPECTATOR);
     }
 
-    private Optional<Pair<Game, JoinSign>> findSign(Location at) {
+    private Optional<GameSign> findSign(Location at) {
         Objects.requireNonNull(at, "at");
 
         ArenaHandler handler = this.plugin.getHandler(ArenaHandler.class).orElse(null);
@@ -87,7 +85,7 @@ public class JoinSignHandler extends JanuszPlugin.Handler {
         return game.getArena().getJoinSigns().stream()
                 .filter(joinSign -> Objects.equals(this.getLocation(joinSign), at))
                 .findFirst()
-                .map(join -> ImmutablePair.of(game, join));
+                .map(join -> new GameSign(game, join));
     }
 
     private void update(Game game, JoinSign join) {
@@ -112,5 +110,15 @@ public class JoinSignHandler extends JanuszPlugin.Handler {
         }
 
         return null;
+    }
+
+    class GameSign {
+        final Game game;
+        final JoinSign sign;
+
+        GameSign(Game game, JoinSign sign) {
+            this.game = Objects.requireNonNull(game, "game");
+            this.sign = Objects.requireNonNull(sign, "sign");
+        }
     }
 }

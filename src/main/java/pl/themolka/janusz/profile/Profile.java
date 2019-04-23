@@ -1,6 +1,6 @@
 package pl.themolka.janusz.profile;
 
-import org.apache.commons.lang3.Validate;
+import org.apache.commons.lang.Validate;
 import pl.themolka.janusz.Message;
 
 import java.nio.charset.StandardCharsets;

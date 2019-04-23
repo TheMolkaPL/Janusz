@@ -36,7 +36,7 @@ public class ClanChatFormatHandler extends JanuszPlugin.Handler {
             return;
         }
 
-        event.setFormat(clan.getColor() + "[" + clan.getTitle() + "] " + event.getFormat());
+        event.setFormat(clan.getColor().toString() + "[" + clan.getTitle() + "] " + event.getFormat());
         // ^ aren't clan titles too long for this? :/
     }
 }

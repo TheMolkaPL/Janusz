@@ -1,6 +1,6 @@
 package pl.themolka.janusz.arena;
 
-import org.apache.commons.lang3.Validate;
+import org.apache.commons.lang.Validate;
 import pl.themolka.janusz.profile.LocalSession;
 import pl.themolka.janusz.season.Season;
 

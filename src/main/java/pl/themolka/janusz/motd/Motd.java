@@ -1,7 +1,6 @@
 package pl.themolka.janusz.motd;
 
-import org.apache.commons.lang3.Validate;
-import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.lang.Validate;
 import org.bukkit.ChatColor;
 
 import java.sql.ResultSet;
@@ -66,30 +65,15 @@ public class Motd {
         return this.isValid(null);
     }
 
-    class Text extends Pair<String, String> {
-        private static final char UNIX_NEW_LINE = '\n';
+    class Text {
+        static final char UNIX_NEW_LINE = '\n';
 
-        private final String primary;
-        private final String secondary;
+        final String primary;
+        final String secondary;
 
-        public Text(String primary, String secondary) {
+        Text(String primary, String secondary) {
             this.primary = this.color(Objects.requireNonNull(primary, "primary"));
             this.secondary = this.color(Optional.ofNullable(secondary).orElse(""));
-        }
-
-        @Override
-        public String getLeft() {
-            return this.primary;
-        }
-
-        @Override
-        public String getRight() {
-            return this.secondary;
-        }
-
-        @Override
-        public String setValue(String value) {
-            throw new UnsupportedOperationException("immutable");
         }
 
         @Override

@@ -1,7 +1,7 @@
 package pl.themolka.janusz.arena;
 
 import com.google.common.collect.ImmutableMap;
-import org.apache.commons.lang3.Validate;
+import org.apache.commons.lang.Validate;
 import org.bukkit.ChatColor;
 import org.bukkit.scheduler.BukkitRunnable;
 import pl.themolka.janusz.profile.LocalSession;

@@ -24,8 +24,8 @@ public final class ChunkUtils {
         Set<Block> blocks = new HashSet<>(16 * 256 * 16);
 
         for (int x = 0; x < 16; x++) {
-            for (int y = 0; y < 256; y++) {
-                for (int z = 0; z < 16; z++) {
+            for (int z = 0; z < 16; z++) {
+                for (int y = 0; y < 256; y++) {
                     Block block = chunk.getBlock(x, y, z);
 
                     if (filter.test(block)) {

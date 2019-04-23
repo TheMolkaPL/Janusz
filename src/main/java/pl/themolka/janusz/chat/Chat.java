@@ -1,6 +1,6 @@
 package pl.themolka.janusz.chat;
 
-import org.apache.commons.lang3.Validate;
+import org.apache.commons.lang.Validate;
 import pl.themolka.janusz.profile.Session;
 import pl.themolka.janusz.season.Season;
 import pl.themolka.janusz.season.SeasonSupplier;

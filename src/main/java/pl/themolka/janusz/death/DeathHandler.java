@@ -1,8 +1,7 @@
 package pl.themolka.janusz.death;
 
-import net.minecraft.server.v1_13_R2.EntityTypes;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_13_R2.entity.CraftEntity;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -63,8 +62,7 @@ public class DeathHandler extends JanuszPlugin.Handler {
         Killer killer = null;
         if (lastDamage instanceof EntityDamageByEntityEvent) {
             Entity damager = ((EntityDamageByEntityEvent) lastDamage).getDamager();
-            String type = Objects.requireNonNull(EntityTypes.getName(((CraftEntity) damager).getHandle().P())).toString();
-            // ^ HOW the heck can I get the entity type namespace and ID??
+            NamespacedKey type = damager.getType().getKey();
 
             killer = Optional.ofNullable(localSessionHandler.getLocalSession(damager))
                     .filter(Optional::isPresent)

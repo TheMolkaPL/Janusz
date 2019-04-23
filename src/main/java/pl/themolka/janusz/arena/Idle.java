@@ -4,6 +4,7 @@ import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import pl.themolka.janusz.Message;
 import pl.themolka.janusz.profile.LocalSession;
@@ -21,9 +22,9 @@ public class Idle extends GameState.Queue {
     private static final Message LEAVE = new Message("Opuścił", "eś", "aś", "eś/aś", " kolejkę.");
 
     private static final Consumer<LocalSession> INFORM = competitor -> competitor.getBukkit()
-            .ifPresent(player -> player.spigot().sendMessage(ChatMessageType.ACTION_BAR, INFO));
+            .ifPresent(player -> sendAction(player, INFO));
     private static final Consumer<LocalSession> REMOVE_MESSAGE = competitor -> competitor.getBukkit()
-            .ifPresent(player -> player.spigot().sendMessage(ChatMessageType.ACTION_BAR, EMPTY));
+            .ifPresent(player -> sendAction(player, EMPTY));
 
     private BukkitRunnable informer;
 
@@ -74,5 +75,10 @@ public class Idle extends GameState.Queue {
         if (this.canStart()) {
             this.game.transform(this.game.getFactory().starting(this.queue));
         }
+    }
+
+    private static void sendAction(Player receiver, BaseComponent[] content) {
+        receiver.sendMessage(TextComponent.toLegacyText(content));
+        // TODO send action messages using Spigot API
     }
 }

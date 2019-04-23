@@ -1,6 +1,7 @@
 package pl.themolka.janusz.death;
 
-import org.apache.commons.lang3.Validate;
+import org.apache.commons.lang.Validate;
+import org.bukkit.NamespacedKey;
 import pl.themolka.janusz.geometry.Vector3d;
 import pl.themolka.janusz.profile.Session;
 import pl.themolka.janusz.season.Season;
@@ -85,7 +86,10 @@ public class Death {
         if (killerSession != null) {
             this.killer = new PlayerKiller(killerSession);
         } else {
-            this.killer = new Killer(resultSet.getString(FIELD_KILLER));
+            String[] keyParts = resultSet.getString(FIELD_KILLER).split("\\.", 2);
+            Validate.isTrue(keyParts.length == 2, "Invalid namespaced key syntax for killer");
+
+            this.killer = new Killer(new NamespacedKey(keyParts[0], keyParts[1]));
         }
     }
 
