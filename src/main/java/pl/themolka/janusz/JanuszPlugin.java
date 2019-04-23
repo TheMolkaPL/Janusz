@@ -10,6 +10,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
+import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.java.JavaPlugin;
 import pl.themolka.janusz.arena.ArenaHandler;
 import pl.themolka.janusz.arena.MatchResultHandler;
@@ -49,6 +50,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public final class JanuszPlugin extends JavaPlugin {
+    private final ChunkGenerator voidGenerator = new VoidGenerator();
+
     private Configuration configuration;
     private Database database;
     private Set<Handler> handlers = Collections.emptySet();
@@ -141,6 +144,11 @@ public final class JanuszPlugin extends JavaPlugin {
         if (this.database != null) {
             this.database.shutdown();
         }
+    }
+
+    @Override
+    public ChunkGenerator getDefaultWorldGenerator(String worldName, String id) {
+        return this.voidGenerator;
     }
 
     public Configuration getConfiguration() {

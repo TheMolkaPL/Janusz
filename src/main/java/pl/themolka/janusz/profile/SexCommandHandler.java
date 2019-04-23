@@ -114,7 +114,7 @@ public class SexCommandHandler extends JanuszPlugin.CommandHandler {
         switch (sex) {
             case FEMALE: return ChatColor.LIGHT_PURPLE;
             case MALE: return ChatColor.BLUE;
-            case UNISEX: return null;
+            case UNISEX: return ChatColor.DARK_AQUA;
         }
 
         throw new IllegalArgumentException("Unknown sex");

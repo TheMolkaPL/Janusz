@@ -13,9 +13,10 @@ public class JoinQuitHandler extends JanuszPlugin.Handler {
     private static final Message JOIN_MESSAGE = new Message(ChatColor.AQUA + "%s " + ChatColor.DARK_AQUA,
             "dołączył", "dołączyła", "dołączył/a",
             " do serwera");
-    private static final Message QUIT_MESSAGE = new Message(ChatColor.AQUA + "%s " + ChatColor.DARK_AQUA,
-            "wyszedł", "wyszła", "opuścił/a",
-            " z serwera");
+    private static final Message QUIT_MESSAGE = new Message(
+            ChatColor.AQUA + "%s" + ChatColor.DARK_AQUA + " wyszedł z serwera",
+            ChatColor.AQUA + "%s" + ChatColor.DARK_AQUA + " wyszła z serwera",
+            ChatColor.AQUA + "%s" + ChatColor.DARK_AQUA + " opuścił/a serwer");
 
     private final JanuszPlugin plugin;
 
