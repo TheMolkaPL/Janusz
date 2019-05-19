@@ -59,6 +59,9 @@ permissions:
   'janusz.command.player.admin':
     description: 'Gives access to the /player command with admin information'
     default: op
+  'janusz.command.player.show-all':
+    description: 'Gives access to show all cached usernames in suggestions.'
+    default: op
   'janusz.command.quit':
     description: 'Gives access to the /quit command'
     default: true

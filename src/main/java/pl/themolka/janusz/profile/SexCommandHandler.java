@@ -9,6 +9,7 @@ import pl.themolka.janusz.database.Database;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -90,9 +91,10 @@ public class SexCommandHandler extends JanuszPlugin.CommandHandler {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
         if (args.length == 1) {
+            String input = args[0].toLowerCase(Locale.US);
             return ARGUMENTS.keySet().stream()
                     .map(String::toLowerCase)
-                    .filter(arg -> arg.startsWith(args[0].toLowerCase()))
+                    .filter(arg -> arg.startsWith(input))
                     .collect(Collectors.toList());
         }
 

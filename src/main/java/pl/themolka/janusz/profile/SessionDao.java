@@ -11,13 +11,33 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 
 public class SessionDao extends Dao<Session> {
     public SessionDao(Database database) {
         super(database);
+    }
+
+    public Set<String> findAllUsernames() {
+        Set<String> results = new HashSet<>(1024);
+
+        try (Connection connection = this.database.getConnection()) {
+            PreparedStatement statement = connection.prepareStatement(
+                    "SELECT DISTINCT id, username FROM `janusz_sessions` ORDER BY `id` ASC;");
+
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                results.add(resultSet.getString(Session.FIELD_USERNAME));
+            }
+        } catch (SQLException e) {
+            this.exceptionThrown(e);
+        }
+
+        return results;
     }
 
     public Optional<Session> findLastForProfile(SeasonSupplier seasons, Profile profile) {

@@ -22,7 +22,6 @@ import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.block.data.Rotatable;
 import org.bukkit.block.data.Waterlogged;
 import org.bukkit.block.data.type.Sign;
 import org.bukkit.block.data.type.WallSign;

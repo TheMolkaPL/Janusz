@@ -33,6 +33,7 @@ import pl.themolka.janusz.profile.LocalSessionHandler;
 import pl.themolka.janusz.profile.PlayerCommandHandler;
 import pl.themolka.janusz.profile.ProfileHandler;
 import pl.themolka.janusz.profile.SexCommandHandler;
+import pl.themolka.janusz.profile.UsernameCacheHandler;
 import pl.themolka.janusz.season.SeasonHandler;
 import pl.themolka.janusz.season.SeasonSupplier;
 import pl.themolka.janusz.sign.ColoredSignsHandler;
@@ -111,6 +112,7 @@ public final class JanuszPlugin extends JavaPlugin {
                 new SeasonHandler(this),
                 new SexCommandHandler(this),
                 new TreeChopHandler(this),
+                new UsernameCacheHandler(this),
                 new VictoryHandler()
         ).collect(Collectors.toCollection(CopyOnWriteArraySet::new));
 

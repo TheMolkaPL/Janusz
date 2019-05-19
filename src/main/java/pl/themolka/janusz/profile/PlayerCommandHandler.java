@@ -12,12 +12,18 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class PlayerCommandHandler extends JanuszPlugin.CommandHandler {
+    private static final String ADMIN_PERMISSION = "janusz.command.player.admin";
+    private static final String SHOW_ALL_PERMISSION = "janusz.command.player.show-all";
+
     private static final String ONLINE = ChatColor.GREEN + ChatColor.BOLD.toString() + "online" + ChatColor.RESET;
 
     private static final Message LAST_SEEN = new Message("był ostatnio widziany",
@@ -118,7 +124,7 @@ public class PlayerCommandHandler extends JanuszPlugin.CommandHandler {
 
         sender.sendMessage(builder.append(".").toString());
 
-        if (sender.hasPermission("janusz.command.player.admin")) {
+        if (sender.hasPermission(ADMIN_PERMISSION)) {
             sender.sendMessage(ChatColor.RED + "Database Profile ID: " + session.getProfile().getId());
         }
     }
@@ -136,6 +142,17 @@ public class PlayerCommandHandler extends JanuszPlugin.CommandHandler {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
-        return null;
+        UsernameCacheHandler usernameCacheHandler = this.plugin.getHandler(UsernameCacheHandler.class).orElse(null);
+
+        if (usernameCacheHandler != null && args.length == 1) {
+            String input = args[0].toLowerCase(Locale.US);
+            if (!input.isEmpty() || sender.hasPermission(SHOW_ALL_PERMISSION)) {
+                return usernameCacheHandler.findStartingWith(input).stream()
+                        .sorted()
+                        .collect(Collectors.toList());
+            }
+        }
+
+        return Collections.emptyList();
     }
 }
