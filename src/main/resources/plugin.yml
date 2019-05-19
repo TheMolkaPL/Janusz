@@ -11,35 +11,33 @@ commands:
     description: 'Teleportuj się do bazy twojego klanu.'
     aliases: ['gbaza', 'ghome']
     permission: 'janusz.command.baza'
-    permission-message: '§cBrak odpowiednich uprawnień.'
     usage: '/<command>'
   closedoors:
     description: 'Zamknij wszystkie drzwi na załadowanych w tym świecie chunkach.'
     permission: 'janusz.command.closedoors'
-    permission-message: '§cBrak odpowiednich uprawnień.'
     usage: '/<command>'
   player:
     description: 'Informacje o danym graczu'
     aliases: ['gracz', 'seen', 'find']
     permission: 'janusz.command.player'
-    permission-message: '§cBrak odpowiednich uprawnień.'
     usage: '/<command> [player]'
   quit:
     description: 'Opuść arenę PVP'
     aliases: ['exit', 'opuść', 'wyjdź', 'surrender']
     permission: 'janusz.command.quit'
-    permission-message: '§cBrak odpowiednich uprawnień.'
     usage: '/<command>'
   reloadclans:
     description: 'Przeładuj klany z bazy danych'
     permission: 'janusz.command.reloadclans'
-    permission-message: '§cBrak odpowiednich uprawnień.'
     usage: '/<command>'
+  replacesign:
+    description: 'Podmień rodzaj tabliczki razem z jej zawartością'
+    permission: 'janusz.command.replacesign'
+    usage: '/<command> <material>'
   sex:
     description: 'Informacje o płci i jej zmiana'
     aliases: ['gender']
     permission: 'janusz.command.sex'
-    permission-message: '§cBrak odpowiednich uprawnień.'
     usage: '<command> [sex]'
 
 permissions:
@@ -66,6 +64,9 @@ permissions:
     default: true
   'janusz.command.reloadclans':
     description: 'Gives access to the /reloadclans command'
+    default: op
+  'janusz.command.replacesign':
+    description: 'Gives access to the /replacesign command.'
     default: op
   'janusz.command.sex':
     description: 'Gives access to the /sex command'

@@ -1,10 +1,11 @@
-package pl.themolka.janusz;
+package pl.themolka.janusz.sign;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.SignChangeEvent;
+import pl.themolka.janusz.JanuszPlugin;
 
 import java.util.Objects;
 

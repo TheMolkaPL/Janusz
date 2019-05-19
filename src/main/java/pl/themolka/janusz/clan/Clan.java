@@ -176,11 +176,16 @@ public class Clan {
 
         Team team = this.getBukkit(scoreboardManager);
         team.setDisplayName(this.title);
-        team.setColor(org.bukkit.ChatColor.getByChar(this.color.toString().substring(1, 2)));
-        // ^ FIXME https://github.com/SpigotMC/BungeeCord/pull/2627
         team.setPrefix(this.color.toString());
         team.setAllowFriendlyFire(true);
         team.setCanSeeFriendlyInvisibles(true);
+
+        for (org.bukkit.ChatColor chatColor : org.bukkit.ChatColor.values()) {
+            if (Objects.equals(chatColor.asBungee(), this.color)) {
+                team.setColor(chatColor);
+                break;
+            }
+        }
     }
 
     public String getPrettyName() {

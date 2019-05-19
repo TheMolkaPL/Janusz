@@ -35,6 +35,8 @@ import pl.themolka.janusz.profile.ProfileHandler;
 import pl.themolka.janusz.profile.SexCommandHandler;
 import pl.themolka.janusz.season.SeasonHandler;
 import pl.themolka.janusz.season.SeasonSupplier;
+import pl.themolka.janusz.sign.ColoredSignsHandler;
+import pl.themolka.janusz.sign.ReplaceSignCommand;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -105,6 +107,7 @@ public final class JanuszPlugin extends JavaPlugin {
                 new ProfileHandler(this),
                 new QuitCommandHandler(this),
                 new ReloadClansCommandHandler(this),
+                new ReplaceSignCommand(),
                 new SeasonHandler(this),
                 new SexCommandHandler(this),
                 new TreeChopHandler(this),
