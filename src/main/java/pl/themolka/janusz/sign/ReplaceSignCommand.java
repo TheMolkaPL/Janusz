@@ -165,6 +165,6 @@ public class ReplaceSignCommand extends JanuszPlugin.CommandHandler {
             toSign.setLine(i, lines[i]);
         }
 
-        return toSign.update(false, true);
+        return toSign.update(false, false);
     }
 }

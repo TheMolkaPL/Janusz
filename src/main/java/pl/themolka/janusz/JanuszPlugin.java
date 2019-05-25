@@ -29,6 +29,7 @@ import pl.themolka.janusz.clan.ReloadClansCommandHandler;
 import pl.themolka.janusz.database.Database;
 import pl.themolka.janusz.death.DeathHandler;
 import pl.themolka.janusz.motd.MotdHandler;
+import pl.themolka.janusz.nms.NmsHacksHandler;
 import pl.themolka.janusz.profile.LocalSessionHandler;
 import pl.themolka.janusz.profile.PlayerCommandHandler;
 import pl.themolka.janusz.profile.ProfileHandler;
@@ -37,6 +38,7 @@ import pl.themolka.janusz.profile.UsernameCacheHandler;
 import pl.themolka.janusz.season.SeasonHandler;
 import pl.themolka.janusz.season.SeasonSupplier;
 import pl.themolka.janusz.sign.ColoredSignsHandler;
+import pl.themolka.janusz.sign.FormatSignCommand;
 import pl.themolka.janusz.sign.ReplaceSignCommand;
 
 import java.util.ArrayList;
@@ -94,6 +96,7 @@ public final class JanuszPlugin extends JavaPlugin {
                 new ColoredSignsHandler(),
                 new DeathHandler(this),
                 new DimensionPrefixHandler(this),
+                new FormatSignCommand(this),
                 new GameModeFixerHandler(this),
                 new InstantTntHandler(this),
                 new JoinSignHandler(this),
@@ -101,6 +104,7 @@ public final class JanuszPlugin extends JavaPlugin {
                 new LocalSessionHandler(this),
                 new MatchResultHandler(this),
                 new MotdHandler(this),
+                new NmsHacksHandler(this),
                 new ObserverHandler(this),
                 new PhantomHandler(this),
                 new PlayerCommandHandler(this),

@@ -8,14 +8,18 @@ api-version: '1.14'
 
 commands:
   baza:
-    description: 'Teleportuj się do bazy twojego klanu.'
+    description: 'Teleportuj się do bazy twojego klanu'
     aliases: ['gbaza', 'ghome']
     permission: 'janusz.command.baza'
     usage: '/<command>'
   closedoors:
-    description: 'Zamknij wszystkie drzwi na załadowanych w tym świecie chunkach.'
+    description: 'Zamknij wszystkie drzwi na załadowanych w tym świecie chunkach'
     permission: 'janusz.command.closedoors'
     usage: '/<command>'
+  formatsign:
+    description: 'Formatuj tabliczkę'
+    permission: 'janusz.command.formatsign'
+    usage: '/<command> <format> <value>'
   player:
     description: 'Informacje o danym graczu'
     aliases: ['gracz', 'seen', 'find']
@@ -52,6 +56,9 @@ permissions:
     default: true
   'janusz.command.closedoors':
     description: 'Gives access to the /closedoors command'
+    default: op
+  'janusz.command.formatsign':
+    description: 'Gives access to the /formatsign command'
     default: op
   'janusz.command.player':
     description: 'Gives access to the /player command'
