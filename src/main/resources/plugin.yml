@@ -8,11 +8,6 @@ api-version: '1.14'
 load: startup
 
 commands:
-  baza:
-    description: 'Teleportuj się do bazy twojego klanu'
-    aliases: ['gbaza', 'ghome']
-    permission: 'janusz.command.baza'
-    usage: '/<command>'
   closedoors:
     description: 'Zamknij wszystkie drzwi na załadowanych w tym świecie chunkach'
     permission: 'janusz.command.closedoors'
@@ -26,15 +21,6 @@ commands:
     aliases: ['gracz', 'seen', 'find']
     permission: 'janusz.command.player'
     usage: '/<command> [player]'
-  quit:
-    description: 'Opuść arenę PVP'
-    aliases: ['exit', 'opuść', 'wyjdź', 'surrender']
-    permission: 'janusz.command.quit'
-    usage: '/<command>'
-  reloadclans:
-    description: 'Przeładuj klany z bazy danych'
-    permission: 'janusz.command.reloadclans'
-    usage: '/<command>'
   replacesign:
     description: 'Podmień rodzaj tabliczki razem z jej zawartością'
     permission: 'janusz.command.replacesign'
@@ -52,9 +38,6 @@ permissions:
   'janusz.command.*':
     description: 'Gives access to all Janusz commands'
     default: op
-  'janusz.command.baza':
-    description: 'Gives access to the /baza command'
-    default: true
   'janusz.command.closedoors':
     description: 'Gives access to the /closedoors command'
     default: op
@@ -70,12 +53,6 @@ permissions:
   'janusz.command.player.show-all':
     description: 'Gives access to show all cached usernames in suggestions.'
     default: op
-  'janusz.command.quit':
-    description: 'Gives access to the /quit command'
-    default: true
-  'janusz.command.reloadclans':
-    description: 'Gives access to the /reloadclans command'
-    default: op
   'janusz.command.replacesign':
     description: 'Gives access to the /replacesign command.'
     default: op
@@ -88,7 +65,4 @@ permissions:
 
   'janusz.colored-signs':
     description: 'Gives access to color signs'
-    default: true
-  'janusz.join-arena':
-    description: 'Gives access to join PVP arenas'
     default: true

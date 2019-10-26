@@ -12,22 +12,8 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.java.JavaPlugin;
-import pl.themolka.janusz.arena.ArenaHandler;
-import pl.themolka.janusz.arena.MatchResultHandler;
-import pl.themolka.janusz.arena.QuitCommandHandler;
-import pl.themolka.janusz.arena.VictoryHandler;
-import pl.themolka.janusz.arena.sign.JoinSignHandler;
-import pl.themolka.janusz.chat.ChatFormatHandler;
 import pl.themolka.janusz.chat.ChatLoggerHandler;
-import pl.themolka.janusz.chat.DimensionPrefixHandler;
-import pl.themolka.janusz.clan.BazaCommandHandler;
-import pl.themolka.janusz.clan.ClanChatFormatHandler;
-import pl.themolka.janusz.clan.ClanChatHandler;
-import pl.themolka.janusz.clan.ClanChatLoggerHandler;
-import pl.themolka.janusz.clan.ClanHandler;
-import pl.themolka.janusz.clan.ReloadClansCommandHandler;
 import pl.themolka.janusz.database.Database;
-import pl.themolka.janusz.death.DeathHandler;
 import pl.themolka.janusz.motd.MotdHandler;
 import pl.themolka.janusz.nms.NmsHacksHandler;
 import pl.themolka.janusz.profile.LocalSessionHandler;
@@ -84,40 +70,22 @@ public final class JanuszPlugin extends JavaPlugin {
         }
 
         this.handlers = Stream.of(
-//                new ArenaHandler(this),
-                new BazaCommandHandler(this),
-                new ChatFormatHandler(),
                 new ChatLoggerHandler(this),
-                new ClanChatFormatHandler(this),
-                new ClanChatHandler(this),
-                new ClanChatLoggerHandler(this),
-                new ClanHandler(this),
                 new CloseDoorsCommand(),
                 new ColoredSignsHandler(),
-                new DeathHandler(this),
-                new DimensionPrefixHandler(this),
                 new FormatSignCommand(this),
-                new GameModeFixerHandler(this),
-                new InstantTntHandler(this),
-                new JoinSignHandler(this),
                 new JoinQuitHandler(this),
                 new LocalSessionHandler(this),
-                new MatchResultHandler(this),
                 new MotdHandler(this),
                 new NmsHacksHandler(this),
                 new ObserverHandler(this),
-                new PhantomHandler(this),
                 new PlayerCommandHandler(this),
                 new PlayerListHandler(),
                 new ProfileHandler(this),
-                new QuitCommandHandler(this),
-                new ReloadClansCommandHandler(this),
                 new ReplaceSignCommand(),
                 new SeasonHandler(this),
                 new SexCommandHandler(this),
-                new TreeChopHandler(this),
-                new UsernameCacheHandler(this),
-                new VictoryHandler()
+                new UsernameCacheHandler(this)
         ).collect(Collectors.toCollection(CopyOnWriteArraySet::new));
 
         this.getHandler(SeasonHandler.class).orElseThrow(NullPointerException::new).enable(this);

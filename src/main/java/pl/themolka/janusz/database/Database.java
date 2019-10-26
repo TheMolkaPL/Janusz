@@ -2,12 +2,7 @@ package pl.themolka.janusz.database;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import pl.themolka.janusz.arena.MatchResult;
-import pl.themolka.janusz.arena.MatchResultDao;
 import pl.themolka.janusz.chat.ChatDao;
-import pl.themolka.janusz.clan.ClanChatDao;
-import pl.themolka.janusz.clan.ClanDao;
-import pl.themolka.janusz.death.DeathDao;
 import pl.themolka.janusz.motd.MotdDao;
 import pl.themolka.janusz.profile.ProfileDao;
 import pl.themolka.janusz.profile.SessionDao;
@@ -69,10 +64,6 @@ public class Database {
     //
 
     private final ChatDao chatDao = new ChatDao(this);
-    private final ClanDao clanDao = new ClanDao(this);
-    private final ClanChatDao clanChatDao = new ClanChatDao(this);
-    private final DeathDao deathDao = new DeathDao(this);
-    private final MatchResultDao matchResultDao = new MatchResultDao(this);
     private final MotdDao motdDao = new MotdDao(this);
     private final ProfileDao profileDao = new ProfileDao(this);
     private final SeasonDao seasonDao = new SeasonDao(this);
@@ -80,22 +71,6 @@ public class Database {
 
     public ChatDao getChatDao() {
         return this.chatDao;
-    }
-
-    public ClanDao getClanDao() {
-        return this.clanDao;
-    }
-
-    public ClanChatDao getClanChatDao() {
-        return this.clanChatDao;
-    }
-
-    public DeathDao getDeathDao() {
-        return this.deathDao;
-    }
-
-    public MatchResultDao getMatchResultDao() {
-        return this.matchResultDao;
     }
 
     public MotdDao getMotdDao() {
