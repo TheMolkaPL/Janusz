@@ -13,6 +13,8 @@ import pl.themolka.janusz.profile.LocalSession;
 import pl.themolka.janusz.util.ChunkUtils;
 
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class CloseDoorsCommand extends JanuszPlugin.CommandHandler {
     public CloseDoorsCommand() {
@@ -27,9 +29,11 @@ public class CloseDoorsCommand extends JanuszPlugin.CommandHandler {
         }
 
         Player player = (Player) sender;
-        Chunk[] loadedChunks = player.getWorld().getLoadedChunks();
+        Set<Chunk> loadedChunks = Stream.of(player.getWorld().getLoadedChunks())
+                .filter(Chunk::isLoaded)
+                .collect(Collectors.toSet());
 
-        sender.sendMessage(ChatColor.YELLOW + "Próba zamknięcia wszystkich drzwi na " + loadedChunks.length + " chunkach...");
+        sender.sendMessage(ChatColor.YELLOW + "Próba zamknięcia wszystkich drzwi na " + loadedChunks.size() + " chunkach...");
 
         int totalDoors = 0;
         int totalChunks = 0;
